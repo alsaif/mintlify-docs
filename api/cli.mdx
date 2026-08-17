@@ -1,0 +1,234 @@
+---
+title: "Nushir CLI: Schedule Posts from the Terminal"
+sidebarTitle: "CLI"
+description: "Install the Nushir CLI to create draft posts, list scheduled content, and manage channels from your terminal or CI pipeline."
+---
+
+The Nushir CLI (`nushir`) lets you create draft posts, list scheduled content, and manage channels directly from your terminal or CI pipeline. Whether you're a developer who prefers the command line or an engineer wiring up a deployment script that announces releases automatically, the CLI gives you the full power of Nushir without opening a browser.
+
+## Installation
+
+<CodeGroup>
+```bash npm
+npm install -g @nushir/cli
+```
+
+```bash brew
+brew install nushir
+```
+</CodeGroup>
+
+After installation, confirm everything is working:
+
+```bash title="Verify installation"
+nushir --version
+```
+
+## Authentication
+
+<Steps>
+  <Step title="Interactive login (recommended for local development)">
+    Run `nushir auth login`. This opens your browser for OAuth — sign in to your Nushir account and the CLI stores a token automatically.
+
+    ```bash title="Interactive login"
+    nushir auth login
+    ```
+  </Step>
+  <Step title="API key (recommended for CI/CD)">
+    Set the `NUSHIR_API_KEY` environment variable. The CLI reads it automatically and skips the browser flow.
+
+    ```bash title="Authenticate via environment variable"
+    export NUSHIR_API_KEY="nushir_live_xxxx"
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  For CI/CD pipelines, store `NUSHIR_API_KEY` as an encrypted environment secret in your provider (GitHub Actions, GitLab CI, CircleCI, etc.) rather than hardcoding it. Then call `nushir post create` from your deploy script to automatically announce releases to your social channels whenever you ship.
+</Note>
+
+---
+
+## Commands
+
+### `nushir post create`
+
+Create a new draft post and optionally hand it off to the Nushir Writer agent via a content brief.
+
+```
+nushir post create [flags]
+```
+
+**Flags**
+
+<ParamField body="--channel" type="string" required>
+  Comma-separated list of channel names or channel IDs to publish to (e.g. `instagram,x` or `ch_abc123,ch_def456`).
+</ParamField>
+
+<ParamField body="--at" type="string" required>
+  Scheduled publish time. Accepts ISO 8601 datetimes (`2026-09-01 09:00`) or natural language (`"tomorrow 9am"`, `"next Monday at noon"`).
+</ParamField>
+
+<ParamField body="--brief" type="string">
+  A content brief passed to the Nushir Writer agent. Writer generates post copy from your brief. Mutually exclusive with `--text`.
+</ParamField>
+
+<ParamField body="--text" type="string">
+  Literal post text. Use this to skip Writer and provide the final copy directly. Mutually exclusive with `--brief`.
+</ParamField>
+
+<ParamField body="--media" type="string">
+  Path to a local media file or a publicly accessible URL to attach to the post.
+</ParamField>
+
+**Example**
+
+```bash title="Create a draft post via a content brief"
+nushir post create \
+  --channel instagram,x \
+  --at "2026-09-01 09:00" \
+  --brief "إطلاق النسخة ٢٫٠"
+```
+
+```
+✓ draft created · waiting review
+```
+
+---
+
+### `nushir post list`
+
+List scheduled, draft, or published posts for your workspace.
+
+```
+nushir post list [flags]
+```
+
+**Flags**
+
+<ParamField body="--status" type="string">
+  Filter by post status. One of `draft`, `approved`, or `published`.
+</ParamField>
+
+<ParamField body="--channel" type="string">
+  Filter by channel name or ID.
+</ParamField>
+
+<ParamField body="--from" type="string">
+  Return posts scheduled on or after this date (ISO 8601 or natural language).
+</ParamField>
+
+<ParamField body="--to" type="string">
+  Return posts scheduled on or before this date (ISO 8601 or natural language).
+</ParamField>
+
+<ParamField body="--json" type="boolean">
+  Output results as newline-delimited JSON instead of a formatted table. Useful for piping to `jq` or other tools.
+</ParamField>
+
+**Example**
+
+```bash title="List all approved posts scheduled for next week"
+nushir post list --status approved --from "next Monday" --to "next Sunday"
+```
+
+<Tip>
+  Pass `--json` to get machine-readable output you can pipe into other tools:
+
+  ```bash title="Filter posts by channel using jq"
+  nushir post list --json | jq 'select(.channel_type == "instagram")'
+  ```
+</Tip>
+
+---
+
+### `nushir post approve <id>`
+
+Approve a draft post by its post ID. This moves the post to `approved` status and queues it for publishing at its scheduled time.
+
+```
+nushir post approve <post_id>
+```
+
+**Example**
+
+```bash title="Approve a draft post"
+nushir post approve post_xyz789
+```
+
+```
+✓ post_xyz789 approved · scheduled for 2026-09-01 09:00
+```
+
+---
+
+### `nushir channel list`
+
+List all social channels connected to your Nushir workspace, including their IDs, types, and connection status.
+
+```
+nushir channel list
+```
+
+**Example**
+
+```bash title="List connected channels"
+nushir channel list
+```
+
+```
+ID            TYPE        NAME               STATUS
+ch_abc123     instagram   @nushir_official   connected
+ch_def456     x           @nushir            connected
+ch_ghi789     linkedin    Nushir             connected
+```
+
+---
+
+### `nushir analytics`
+
+Print a summary of recent engagement analytics across your connected channels.
+
+```
+nushir analytics [flags]
+```
+
+**Flags**
+
+<ParamField body="--channel" type="string">
+  Scope the summary to a specific channel name or ID.
+</ParamField>
+
+<ParamField body="--from" type="string">
+  Start of the reporting window (ISO 8601 or natural language). Defaults to 7 days ago.
+</ParamField>
+
+<ParamField body="--to" type="string">
+  End of the reporting window. Defaults to today.
+</ParamField>
+
+**Example**
+
+```bash title="View analytics for the past 30 days"
+nushir analytics --from "30 days ago"
+```
+
+---
+
+## Exit Codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Command completed successfully. |
+| `1` | Validation error — a required flag is missing or a value is invalid. |
+| `2` | API error — the Nushir API returned an error response (check your API key and network). |
+
+Use exit codes in shell scripts to handle failures gracefully:
+
+```bash title="Exit code handling in a deploy script"
+nushir post create --channel instagram,x --at "now" --text "v2.1 is live 🚀"
+if [ $? -ne 0 ]; then
+  echo "Failed to create Nushir post" >&2
+  exit 1
+fi
+```

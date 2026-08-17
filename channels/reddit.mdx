@@ -1,0 +1,78 @@
+---
+title: "Schedule Reddit Subreddit Posts with Nushir"
+sidebarTitle: "Reddit"
+description: "Connect your Reddit account to Nushir and schedule subreddit posts — text, link, or image — with AI-written titles and copy that respects each subreddit's rules."
+---
+
+Reddit rewards content that feels native to each community, and that means every subreddit has its own culture, formatting expectations, and explicit rules. Connect your Reddit account once, and Nushir's agent plans your posting cadence, writes titles within the 300-character limit, formats body copy as text, link, or image posts, and checks against the subreddit rules you've configured — then holds everything in draft until you approve.
+
+<Tip>
+  The Writer agent is rule-aware. Add each subreddit's posting rules and restrictions to your channel's **tone/restrictions settings**, and the agent will factor them in every time it drafts a post for that community.
+</Tip>
+
+## Channel Specs
+
+| Property | Detail |
+|---|---|
+| **Content types** | Subreddit posts |
+| **Text limit** | 300-character title |
+| **Media** | Text, link, or image |
+| **Platform features** | Each subreddit's rules apply |
+
+## What the Agent Does
+
+<Steps>
+  <Step title="Plans your rhythm">
+    The agent determines a posting cadence that matches the activity level of each subreddit you're targeting, so your posts land when the community is most active and visible.
+  </Step>
+  <Step title="Writes within platform limits">
+    Titles are kept within Reddit's 300-character limit. Body copy is written in the style expected by that subreddit — conversational for community subs, detailed for technical ones — with your brand voice layered on top.
+  </Step>
+  <Step title="Prepares media">
+    For image posts, visuals are assembled on-brand from your media library, with AI generation as a fallback. Link posts are formatted with a clean, descriptive title.
+  </Step>
+  <Step title="Reads the results">
+    Upvote counts, comment volume, and cross-post data feed back into next month's plan, showing which topics resonate and which subreddits perform best for your content.
+  </Step>
+</Steps>
+
+## How to Connect
+
+<Steps>
+  <Step title="Add the channel">
+    Go to **Settings → Channels → Add Channel** and select **Reddit**. Review the permissions Nushir requests before approving.
+  </Step>
+  <Step title="Authenticate via Reddit">
+    Complete the Reddit OAuth flow. Nushir connects to your account with only the scopes needed to submit and manage posts.
+  </Step>
+  <Step title="Set your tone and subreddit rules">
+    In the channel settings, add the subreddits you plan to post in, your brand tone, and any community-specific rules or restrictions the agent should follow.
+  </Step>
+  <Step title="Review drafts in the calendar">
+    Drafts appear in your content calendar with the target subreddit and post type clearly shown. Approve, edit, or reschedule before they submit.
+  </Step>
+</Steps>
+
+<Note>
+  Reddit accounts with low karma may be restricted from posting in certain subreddits. If a post fails, Nushir will surface the error in the calendar so you can take action.
+</Note>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Will Nushir post without my approval?">
+    No. All posts start as drafts. You can opt in to auto-publish per channel in settings, but most Reddit communities benefit from a human review before anything submits.
+  </Accordion>
+  <Accordion title="How does the agent handle subreddit rules?">
+    When you add a subreddit's rules to the channel's tone/restrictions settings, the Writer agent reads them as constraints every time it drafts a post — avoiding banned topics, respecting required flair, and matching the expected post format.
+  </Accordion>
+  <Accordion title="Can I target multiple subreddits from one connection?">
+    Yes. One connected Reddit account is one channel slot, and within it you can configure posts for multiple subreddits. The agent treats each subreddit's settings independently.
+  </Accordion>
+  <Accordion title="How does this count against my plan?">
+    Each connected Reddit account uses one channel slot. See the [pricing page](https://nushir.com/pricing.html) for slot limits per tier.
+  </Accordion>
+  <Accordion title="Can I publish via API or MCP?">
+    Yes. The Nushir REST API and MCP both support Reddit post submission, so you can trigger posts from your own agent or automation.
+  </Accordion>
+</AccordionGroup>

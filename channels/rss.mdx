@@ -1,0 +1,72 @@
+---
+title: "Auto-Pull and Schedule Blog Posts via RSS Feed"
+sidebarTitle: "RSS"
+description: "Add your blog's RSS feed and let the Nushir agent automatically pull each new post, create a draft with title, summary, and article image, and queue it for review or publishing."
+---
+
+If you publish to a blog, your RSS feed is a ready-made content stream that Nushir can tap into automatically. When you add an RSS channel, the agent monitors your feed continuously — the moment a new post is detected, it pulls the title, summary, and article image and creates a draft in your Nushir calendar straight away. No manual copying, no reformatting. You can review each draft before it goes out, or configure the channel to auto-publish so your feed activity flows downstream to your other channels without any extra steps.
+
+## Platform Specs
+
+| | |
+|---|---|
+| **Content types** | Auto-pulled articles from your blog feed |
+| **Text limit** | Title + summary extracted from each post |
+| **Media** | Article image pulled from the feed |
+| **Platform note** | Auto-publish triggered on new feed entry |
+
+## What the Agent Does
+
+<Steps>
+  <Step title="Plan Your Rhythm">
+    Rather than a fixed schedule, the RSS channel follows your blog's natural publishing rhythm — each new entry in your feed triggers the agent to create a corresponding draft immediately, keeping your Nushir calendar in sync with your blog in real time.
+  </Step>
+  <Step title="Write Within Limits">
+    The agent extracts the title and a clean summary from each feed entry, stripping any extraneous HTML and reformatting the text so it reads clearly as a standalone post or teaser wherever it's distributed next.
+  </Step>
+  <Step title="Prepare Media">
+    The article image from each feed entry is pulled automatically and attached to the draft. If no image is found in the feed, the agent sources a relevant visual from your media library or generates one as a fallback.
+  </Step>
+  <Step title="Read Results">
+    Click-through and engagement data from the drafted posts flows back into your Nushir reporting, letting you see which blog posts generate the most downstream activity across your connected channels.
+  </Step>
+</Steps>
+
+## How to Connect
+
+<Steps>
+  <Step title="Add Channel">
+    In your Nushir dashboard, click **Add Channel** and select RSS.
+  </Step>
+  <Step title="Enter Your Feed URL">
+    Paste in the URL of your blog's RSS or Atom feed. Nushir will validate the feed and pull the most recent entries immediately.
+  </Step>
+  <Step title="Set Your Preferences">
+    Choose whether new entries should land as drafts for your review or publish automatically. You can also set tone adjustments for how summaries are rewritten.
+  </Step>
+  <Step title="Review Drafts">
+    Each new blog post appears as a draft in your calendar. Approve, edit, or let auto-publish handle it — depending on the settings you chose.
+  </Step>
+</Steps>
+
+<Note>
+  The RSS channel monitors your feed continuously. When a new post is detected, a draft is created in your Nushir calendar automatically — no manual action required on your end.
+</Note>
+
+<Tip>
+  Pair your RSS channel with other channels (like LinkedIn or X) so that every new blog post automatically generates tailored social drafts as well — all from the same feed trigger.
+</Tip>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Will the agent publish without my approval?">
+    By default, each new feed entry creates a draft that waits in your calendar for your review. You can opt in to auto-publish so that new posts are queued and sent automatically as soon as the agent detects them in your feed.
+  </Accordion>
+  <Accordion title="Does an RSS feed use one of my channel slots?">
+    Yes — each connected RSS feed counts as one channel slot in your plan. If you monitor multiple blogs, each feed occupies its own slot. See the [pricing page](https://nushir.com/pricing.html) for slot limits per plan.
+  </Accordion>
+  <Accordion title="Can I trigger RSS-based publishing via API or MCP?">
+    Yes. Nushir's API and MCP endpoint support RSS-sourced post creation and publishing, so you can integrate blog-to-channel workflows into your own pipelines. See the [API & MCP docs](https://nushir.com/channels.html#api) for details.
+  </Accordion>
+</AccordionGroup>

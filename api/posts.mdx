@@ -1,0 +1,238 @@
+---
+title: "REST API Endpoints for Scheduling Posts"
+sidebarTitle: "Posts"
+description: "Create, list, retrieve, update, and delete scheduled posts across your connected channels using the Nushir REST API."
+---
+
+The Posts API is the core of Nushir's publishing workflow. You can schedule content across one or more channels in a single request, supply per-channel copy overrides, attach media, and manage post lifecycle from draft through to published — all programmatically. Combine these endpoints with the [Analytics API](/api/analytics) to build fully automated publishing and reporting pipelines.
+
+---
+
+## POST /v1/posts
+
+Create a new scheduled post. The post is saved as a `draft` by default; set `status` to `approved` to have it publish automatically at the `scheduled_at` time.
+
+### Request body
+
+<ParamField body="channel_ids" type="string[]" required>
+  An array of channel IDs to publish the post to. You can retrieve channel IDs from [GET /v1/channels](/api/channels).
+</ParamField>
+
+<ParamField body="text" type="string | object" required>
+  The post copy. Pass a plain string to use the same text across all channels, or pass an object keyed by channel ID to supply per-channel overrides.
+
+  ```json
+  { "ch_01abc": "Instagram caption here", "ch_02xyz": "Different copy for LinkedIn" }
+  ```
+</ParamField>
+
+<ParamField body="media" type="object[]">
+  An array of media attachment objects. Each object must include:
+  - `url` (string, required) — publicly accessible URL of the media file.
+  - `type` (string, required) — `"image"` or `"video"`.
+  - `alt_text` (string, optional) — accessibility description for images.
+</ParamField>
+
+<ParamField body="scheduled_at" type="string" required>
+  UTC datetime in ISO 8601 format (e.g. `2025-09-01T10:00:00Z`) at which the post should be published.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Initial status of the post. Accepted values: `"draft"` (default) or `"approved"`. Approved posts publish automatically at `scheduled_at`.
+</ParamField>
+
+### Example
+
+<CodeGroup>
+```json title="Request body"
+{
+  "channel_ids": ["ch_01abc123", "ch_02xyz456"],
+  "text": {
+    "ch_01abc123": "Check out our latest drop 🔥 #NewArrival",
+    "ch_02xyz456": "We just launched our newest collection. Read more on the blog."
+  },
+  "media": [
+    {
+      "url": "https://cdn.example.com/images/launch.jpg",
+      "type": "image",
+      "alt_text": "New product launch photo"
+    }
+  ],
+  "scheduled_at": "2025-09-01T10:00:00Z",
+  "status": "approved"
+}
+```
+
+```json title="Response — 201 Created"
+{
+  "id": "post_9kLmN3pQ",
+  "status": "approved",
+  "channel_ids": ["ch_01abc123", "ch_02xyz456"],
+  "scheduled_at": "2025-09-01T10:00:00Z",
+  "created_at": "2025-08-20T14:32:00Z"
+}
+```
+</CodeGroup>
+
+### Response fields
+
+<ResponseField name="id" type="string">
+  Unique identifier for the post.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status of the post: `draft`, `approved`, `published`, or `failed`.
+</ResponseField>
+
+<ResponseField name="channel_ids" type="string[]">
+  Array of channel IDs this post is scheduled for.
+</ResponseField>
+
+<ResponseField name="scheduled_at" type="string">
+  ISO 8601 UTC datetime at which the post is scheduled to publish.
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 UTC datetime at which the post record was created.
+</ResponseField>
+
+---
+
+## GET /v1/posts
+
+List posts in your workspace. Results are paginated and returned in reverse-chronological order by `scheduled_at`.
+
+### Query parameters
+
+<ParamField query="status" type="string">
+  Filter by post status. Accepted values: `draft`, `approved`, `published`, `failed`.
+</ParamField>
+
+<ParamField query="channel_id" type="string">
+  Return only posts scheduled for the specified channel ID.
+</ParamField>
+
+<ParamField query="from" type="string">
+  ISO 8601 datetime. Return posts with `scheduled_at` at or after this value.
+</ParamField>
+
+<ParamField query="to" type="string">
+  ISO 8601 datetime. Return posts with `scheduled_at` before or at this value.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Number of posts to return per page. Default: `20`. Maximum: `100`.
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of posts to skip before returning results. Use with `limit` for pagination. Default: `0`.
+</ParamField>
+
+### Example
+
+<CodeGroup>
+```bash title="Request"
+curl "https://api.nushir.com/v1/posts?status=approved&limit=2" \
+  -H "Authorization: Bearer nushir_live_xxxx"
+```
+
+```json title="Response — 200 OK"
+{
+  "data": [
+    {
+      "id": "post_9kLmN3pQ",
+      "status": "approved",
+      "channel_ids": ["ch_01abc123"],
+      "scheduled_at": "2025-09-01T10:00:00Z",
+      "created_at": "2025-08-20T14:32:00Z"
+    },
+    {
+      "id": "post_7jKpR2mX",
+      "status": "approved",
+      "channel_ids": ["ch_02xyz456"],
+      "scheduled_at": "2025-08-28T08:00:00Z",
+      "created_at": "2025-08-18T09:15:00Z"
+    }
+  ],
+  "total": 47,
+  "limit": 2,
+  "offset": 0
+}
+```
+</CodeGroup>
+
+---
+
+## GET /v1/posts/{id}
+
+Retrieve a single post by its ID.
+
+<CodeGroup>
+```bash title="Request"
+curl https://api.nushir.com/v1/posts/post_9kLmN3pQ \
+  -H "Authorization: Bearer nushir_live_xxxx"
+```
+
+```json title="Response — 200 OK"
+{
+  "id": "post_9kLmN3pQ",
+  "status": "approved",
+  "channel_ids": ["ch_01abc123", "ch_02xyz456"],
+  "text": {
+    "ch_01abc123": "Check out our latest drop 🔥 #NewArrival",
+    "ch_02xyz456": "We just launched our newest collection. Read more on the blog."
+  },
+  "media": [
+    {
+      "url": "https://cdn.example.com/images/launch.jpg",
+      "type": "image",
+      "alt_text": "New product launch photo"
+    }
+  ],
+  "scheduled_at": "2025-09-01T10:00:00Z",
+  "created_at": "2025-08-20T14:32:00Z"
+}
+```
+</CodeGroup>
+
+---
+
+## PATCH /v1/posts/{id}
+
+Update a post that is in `draft` or `approved` status. You can change `text`, `media`, `scheduled_at`, and `status`. Only the fields you include in the request body are updated.
+
+<CodeGroup>
+```json title="Request body"
+{
+  "scheduled_at": "2025-09-02T12:00:00Z",
+  "status": "approved"
+}
+```
+
+```json title="Response — 200 OK"
+{
+  "id": "post_9kLmN3pQ",
+  "status": "approved",
+  "channel_ids": ["ch_01abc123", "ch_02xyz456"],
+  "scheduled_at": "2025-09-02T12:00:00Z",
+  "created_at": "2025-08-20T14:32:00Z"
+}
+```
+</CodeGroup>
+
+---
+
+## DELETE /v1/posts/{id}
+
+Delete a post. Only posts with a `draft` or `approved` status can be deleted via the API.
+
+```bash title="Request"
+curl -X DELETE https://api.nushir.com/v1/posts/post_9kLmN3pQ \
+  -H "Authorization: Bearer nushir_live_xxxx"
+```
+
+A successful deletion returns a `204 No Content` response with an empty body.
+
+<Note>
+  Published posts cannot be deleted via the API — their `status` is `published` and the API returns `422 Unprocessable Entity` if you attempt deletion. To remove a published post from a channel, use the Nushir dashboard.
+</Note>

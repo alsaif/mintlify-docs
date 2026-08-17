@@ -1,0 +1,108 @@
+---
+title: "Authenticate with the Nushir API Using API Keys"
+sidebarTitle: "Authentication"
+description: "Learn how to generate Nushir API keys, attach them to requests, use scopes, and follow security best practices to keep your keys safe."
+---
+
+Every request you make to the Nushir API must include a valid API key in the `Authorization` header. Nushir uses Bearer token authentication — no OAuth flow is required for server-to-server integrations. Keys are generated in your dashboard and grant access according to the scopes and key type you configure at creation time.
+
+## Generating an API Key
+
+<Steps>
+  <Step title="Open API settings">
+    In the Nushir dashboard, navigate to **Settings → API → API Keys**.
+  </Step>
+  <Step title="Create a new key">
+    Click **New Key**. Give the key a descriptive name (for example, `production-scheduler` or `analytics-dashboard`) so you can identify it later.
+  </Step>
+  <Step title="Choose a key type and scopes">
+    Select whether this is a **Live** or **Test** key, then choose the scopes the key requires. See [Key Types](#key-types) and [Scopes](#scopes) below.
+  </Step>
+  <Step title="Copy your key">
+    After clicking **Create**, your full API key is displayed **once**. Copy it immediately and store it in a secrets manager or environment variable — Nushir never shows the full key again.
+  </Step>
+</Steps>
+
+## Using Your API Key
+
+Include your API key in the `Authorization` header of every request using the Bearer scheme:
+
+```bash title="Authenticated request"
+curl https://api.nushir.com/v1/posts \
+  -H "Authorization: Bearer nushir_live_xxxx"
+```
+
+No cookies, session tokens, or query-string parameters are accepted. The `Authorization` header is the only supported authentication mechanism.
+
+## Key Types
+
+Nushir issues two types of API keys:
+
+| Type | Prefix | Behavior |
+|------|--------|----------|
+| **Live** | `nushir_live_` | Performs real publishing actions on connected channels. Use in production. |
+| **Test** | `nushir_test_` | Runs in a sandbox environment. Posts are processed but never actually published. Use during development and CI. |
+
+Switch to a Test key while building your integration so you can exercise the full API without accidentally publishing content.
+
+## Scopes
+
+When you create a key, you assign one or more scopes that control what the key can do:
+
+| Scope | Permissions |
+|-------|-------------|
+| `read` | Read-only access to posts, channels, and analytics. |
+| `write` | Create and update posts and channels. Includes all `read` permissions. |
+| `admin` | Delete posts, disconnect channels, and manage account-level settings. Includes all `write` permissions. |
+
+Follow the principle of least privilege — grant only the scopes your integration actually needs.
+
+## Error Responses
+
+The API returns the following authentication-related errors:
+
+**401 Unauthorized** — the key is missing, malformed, or revoked:
+
+```json title="401 response"
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "No valid API key was provided."
+  }
+}
+```
+
+**403 Forbidden** — the key is valid but does not have the required scope for this action:
+
+```json title="403 response"
+{
+  "error": {
+    "code": "forbidden",
+    "message": "Your API key does not have the 'admin' scope required for this action."
+  }
+}
+```
+
+**429 Too Many Requests** — the key has exceeded the 60 requests/minute rate limit:
+
+```json title="429 response"
+{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "Rate limit exceeded. Retry after the number of seconds in the Retry-After header.",
+    "retry_after": 22
+  }
+}
+```
+
+## Security Best Practices
+
+<Warning>
+  Never share your API keys publicly or commit them to version control. If a key is accidentally exposed, revoke it immediately in **Settings → API → API Keys** and generate a replacement.
+</Warning>
+
+- **Store keys in environment variables** or a secrets manager (for example, AWS Secrets Manager, HashiCorp Vault, or a `.env` file excluded from your repository).
+- **Never expose keys in client-side code.** API keys are for server-to-server communication only. A key embedded in a browser or mobile app can be extracted by anyone.
+- **Use Test keys during development.** This protects production channels from accidental publishes while you build and test.
+- **Rotate keys regularly.** Treat key rotation as routine hygiene — revoke old keys and issue new ones every few months, or whenever team membership changes.
+- **Scope keys tightly.** A key used only for reading analytics should have the `read` scope, not `admin`.
