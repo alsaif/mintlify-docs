@@ -1,0 +1,39 @@
+---
+title: "Posting times"
+description: "Set the times a channel normally posts, and what depends on them."
+---
+
+Each channel carries a list of times it normally posts. They are used for two
+things:
+
+1. **Find a slot** returns the next free one.
+2. The calendar suggests them when you click an empty area.
+
+They are suggestions, not restrictions — you can always schedule a post at any
+time you like.
+
+## Setting them
+
+Channel menu → **Preview**, then edit the times. They repeat weekly.
+
+## Why "free" matters
+
+A slot is free if nothing is already scheduled for that channel at that time.
+Asking for the next free slot repeatedly gives you a spread-out queue rather
+than five posts stacked on one morning.
+
+The API exposes the same logic:
+
+```bash
+curl https://platform.nushir.com/api/public/v1/find-slot/CHANNEL_ID \
+  -H "Authorization: $NUSHIR_API_KEY"
+```
+
+```json
+{ "date": "2026-09-02T09:00:00Z" }
+```
+
+<Note>
+Times are stored and returned in **UTC**. A slot shown as 09:00 in a UTC+3
+account is `06:00:00Z` over the API.
+</Note>

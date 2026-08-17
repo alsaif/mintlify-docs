@@ -1,0 +1,32 @@
+---
+title: "Upload and media problems"
+description: "Uploads that fail, and video that is rejected."
+---
+
+## The upload fails
+
+**Too large.** Deployment upload limits apply before any platform limit. For big
+video, use `upload-from-url` so the file never passes through the browser.
+
+**Unsupported type.** Platforms accept a narrow set of formats. MP4 (H.264) for
+video and JPEG or PNG for images are accepted everywhere.
+
+## The upload worked but publishing was rejected
+
+The platform applies its own rules on receipt, which are stricter than the
+upload's:
+
+- **Aspect ratio** — several platforms reject anything outside a range.
+- **Duration** — both minimum and maximum, depending on the platform.
+- **Codec** — a `.mp4` container can still hold a codec the platform refuses.
+  Re-encode to H.264 with `yuv420p`.
+
+<Note>
+`yuv420p` is the one worth remembering. Video encoded as `yuv444p` plays fine
+locally and is rejected or renders black on most platforms.
+</Note>
+
+## `upload-from-url` cannot fetch my file
+
+The server fetches it with no credentials, so the URL must be publicly
+reachable. A signed URL works; a private bucket path does not.

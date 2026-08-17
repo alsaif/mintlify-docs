@@ -1,0 +1,48 @@
+---
+title: "Authentication"
+description: "One header, two kinds of credential."
+---
+
+```
+Authorization: your-api-key
+```
+
+<Warning>
+No `Bearer` prefix. The key is sent raw. Adding `Bearer ` returns `401`, and it
+is the single most common first-call mistake.
+</Warning>
+
+## Two credentials, one header
+
+**API key** — from *Settings → Developers*. Scoped to the organisation that
+created it. This is what you want for your own integration.
+
+**OAuth token** — issued to an approved app so other people can connect *their*
+Nushir account to your product. Recognised by a `pos_` prefix, and resolves to
+the organisation that granted access.
+
+Both go on the same header; the server tells them apart by the prefix.
+
+## Scope
+
+A key acts as the whole organisation. There are no per-key permissions — a key
+that can read can also publish, delete posts and disconnect channels.
+
+## Keeping it safe
+
+<Warning>
+Server-side only. A key in browser code is public the moment the bundle ships,
+and it can disconnect every channel on the account.
+</Warning>
+
+Keep it in an environment variable or a secret manager. If one leaks, revoke it
+in *Settings → Developers* — revocation takes effect immediately.
+
+## Checking a key works
+
+```bash
+curl -i https://platform.nushir.com/api/public/v1/is-connected \
+  -H "Authorization: $NUSHIR_API_KEY"
+```
+
+`200` means the key is good. `401` means it is missing, wrong, or prefixed.

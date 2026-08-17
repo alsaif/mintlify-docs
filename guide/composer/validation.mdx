@@ -1,0 +1,42 @@
+---
+title: "Why the composer will not save"
+description: "The validation rules, and how to read what they are telling you."
+---
+
+The composer blocks scheduling rather than letting a post fail at publish time.
+The common causes, in the order they occur:
+
+## A required setting is empty
+
+Some platforms need more than text. TikTok needs a privacy level; Reddit needs
+a subreddit; YouTube needs a title. The channel's settings tab shows which field
+is missing.
+
+## The post has no media
+
+Instagram and TikTok will not take a text-only post. Attach an image or video.
+
+## Over the character limit
+
+Shown per channel. When several channels share a global draft, the lowest limit
+governs — tailor that channel separately rather than shortening everything.
+
+## The channel needs reconnecting
+
+An expired token blocks scheduling to that channel. Reconnect from the channel
+menu.
+
+## Over the API
+
+The API applies the same rules and returns `400` with the failing fields named:
+
+```json
+{
+  "statusCode": 400,
+  "message": ["settings.privacy_level should not be empty"],
+  "error": "Bad Request"
+}
+```
+
+Two ways round it while you assemble a post: create it as a `draft`, which skips
+validation entirely, then call `/posts/{id}/missing` to see what is outstanding.

@@ -1,71 +1,26 @@
 ---
-title: "Schedule Mastodon Posts with the Nushir AI Agent"
-sidebarTitle: "Mastodon"
-description: "Connect any Mastodon server once and let Nushir plan your cadence, write within your instance's character limit, attach media, and track results month over month."
+title: "Mastodon"
+description: "Connecting Mastodon, and the rules it enforces."
 ---
 
-Mastodon's federated structure means your audience is spread across dozens of independent servers, each with its own community culture and, sometimes, its own character limit. Nushir's AI agent handles that complexity for you. Enter your server URL and credentials once, and the agent learns your instance's settings, writes posts that respect those limits, attaches up to four images, and supports content warnings where appropriate. Drafts appear in your calendar on the same schedule as every other channel — nothing publishes without your approval.
-
-## Platform Specs
-
-| Property | Detail |
+| | |
 |---|---|
-| **Content types** | Posts, Images, Content Warnings |
-| **Text limit** | 500 characters by default (varies by server) |
-| **Media** | Up to 4 attachments |
-| **Server** | Works with any Mastodon-compatible instance |
+| API identifier | `mastodon` |
+| Account required | Any account on any instance. |
+| Media | Optional. |
+| Multi-part posts | Native thread. |
+| Analytics | None. |
 
-## What the Agent Does
+## Connecting
 
-<Steps>
-  <Step title="Plans your posting rhythm">
-    The agent sets a posting cadence appropriate for Mastodon — typically lower frequency than Twitter-style platforms, with an emphasis on quality over volume. It distributes topics across the month and factors in your server's community norms when shaping the content plan.
-  </Step>
-  <Step title="Writes within your server's character limit">
-    The default Mastodon character limit is 500, but many servers raise or lower it. Nushir detects your instance's limit automatically and writes every post to fit. Drafts are written in your tone — conversational, professional, or technical — in Arabic or English, with your content restrictions applied throughout. When a post covers sensitive topics, the agent drafts an appropriate content warning label.
-  </Step>
-  <Step title="Prepares images and attachments">
-    The agent attaches up to 4 images or files per post, pulling from your media library and generating on-brand alternatives when needed. Images are resized for Mastodon's display format and alt-text descriptions are added automatically for accessibility.
-  </Step>
-  <Step title="Reads results to improve the next plan">
-    After each post, the agent reads available engagement data — favourites, boosts, replies, and reach — and uses those metrics to adjust posting times and topic priorities for the following month.
-  </Step>
-</Steps>
+**Add Channel → Mastodon**, approve access on the platform, and you are returned
+here. See [connect a channel](/guide/channels/connect) for the general flow.
 
-## How to Connect Mastodon
+## Worth knowing
 
-<Steps>
-  <Step title="Add the channel">
-    In your Nushir dashboard, click **Add Channel** and select **Mastodon**.
-  </Step>
-  <Step title="Enter your server URL">
-    Type the full URL of your Mastodon instance — for example, `https://mastodon.social` or `https://fosstodon.org`. Nushir uses this to fetch your instance's API endpoint and character limit.
-  </Step>
-  <Step title="Authenticate with your account">
-    You'll be redirected to your Mastodon server's OAuth page. Sign in with your Mastodon username and password, review the permissions, and click **Authorize**. Nushir receives an access token and never stores your password.
-  </Step>
-  <Step title="Set your tone and restrictions">
-    Choose your language, describe your brand voice, and note any content restrictions. If your server's community has specific norms — for example, no unmarked spoilers or mandatory content warnings for certain topics — add those as restrictions so the agent follows them automatically.
-  </Step>
-  <Step title="Review drafts in your calendar">
-    Mastodon drafts appear alongside all your other channels in the content calendar. Edit any post, adjust the content warning, change the schedule, and approve when ready.
-  </Step>
-</Steps>
+Character limits are set per instance, not globally — the composer uses the connected instance's limit.
 
-<Note>
-  You can disconnect Mastodon at any time from **Channel Settings** in Nushir, or by revoking the Nushir application from the Authorised Applications section of your Mastodon account preferences.
-</Note>
+## Posting over the API
 
-## Frequently Asked Questions
-
-<AccordionGroup>
-  <Accordion title="Does the agent post to Mastodon without my approval?">
-    No. All drafts default to **Pending** in your calendar. Auto-publish is an opt-in setting available per channel — it is never enabled without your explicit action.
-  </Accordion>
-  <Accordion title="Does each Mastodon account count as one channel slot?">
-    Yes. Each connected Mastodon account — even across different servers — uses one channel slot from your plan. See the [pricing page](https://nushir.com/pricing.html) for slot limits per plan.
-  </Accordion>
-  <Accordion title="Can I publish to Mastodon via the API or MCP?">
-    Yes. REST API and MCP publishing are supported on Mastodon, just like every other Nushir channel. See the [API & MCP documentation](/channels/overview#custom-channel) for integration details.
-  </Accordion>
-</AccordionGroup>
+Use `mastodon` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/api-reference/channel-settings).

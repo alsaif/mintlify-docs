@@ -1,0 +1,108 @@
+---
+title: "Channel settings"
+description: "The per-platform object that POST /posts requires."
+---
+
+Each entry in `posts` can carry a `settings` object. What belongs in it depends
+on the channel's `identifier`, and for several platforms it is **required** —
+omit it and the call returns `400`.
+
+<Note>
+`settings` is ignored when `"type": "draft"`. That is the intended way to build
+a post incrementally before you know every field.
+</Note>
+
+## Where the shape comes from
+
+Each platform's settings are defined by its provider in the application, so this
+list follows what the server will actually accept. When a platform changes its
+API, the accepted fields change with it.
+
+## Common platforms
+
+<AccordionGroup>
+  <Accordion title="tiktok">
+    ```json
+    {
+      "__type": "tiktok",
+      "privacy_level": "PUBLIC_TO_EVERYONE",
+      "content_posting_method": "DIRECT_POST",
+      "disable_comment": false,
+      "disable_duet": false,
+      "disable_stitch": false,
+      "brand_content_toggle": false,
+      "brand_organic_toggle": false
+    }
+    ```
+
+    `content_posting_method` is the one that matters. `DIRECT_POST` publishes to
+    the profile. `UPLOAD` sends it to the creator's TikTok inbox as a draft they
+    must finish within 24 hours — and in that mode **every other setting here is
+    silently discarded**, including privacy level.
+  </Accordion>
+
+  <Accordion title="reddit">
+    ```json
+    {
+      "__type": "reddit",
+      "subreddit": [{ "value": { "name": "r/example", "title": "Post title" } }]
+    }
+    ```
+
+    A subreddit is required. Each subreddit has its own posting rules, and a
+    post accepted by the API can still be removed by that subreddit's
+    moderation.
+  </Accordion>
+
+  <Accordion title="youtube">
+    ```json
+    {
+      "__type": "youtube",
+      "title": "Video title",
+      "type": "public",
+      "thumbnail": { "id": "med_01H9" }
+    }
+    ```
+
+    A title is required — YouTube has no concept of an untitled upload.
+  </Accordion>
+
+  <Accordion title="instagram">
+    ```json
+    { "__type": "instagram", "post_type": "post", "collaborators": [] }
+    ```
+
+    `post_type` may be `post`, `reel` or `story`. Media is required regardless;
+    Instagram accepts no text-only post.
+  </Accordion>
+
+  <Accordion title="pinterest">
+    ```json
+    {
+      "__type": "pinterest",
+      "board": "BOARD_ID",
+      "title": "Pin title",
+      "link": "https://example.com"
+    }
+    ```
+
+    A board is required.
+  </Accordion>
+
+  <Accordion title="x, mastodon, bluesky, threads">
+    ```json
+    { "__type": "x" }
+    ```
+
+    No required fields. Multi-part posts become native threads on these
+    platforms — see [threads](/guide/composer/threads-and-comments).
+  </Accordion>
+</AccordionGroup>
+
+## Finding the shape for any platform
+
+Two reliable ways, rather than guessing:
+
+1. Configure one post of that type in the composer, then read it back with
+   `GET /posts` and copy the `settings` shape.
+2. `GET /integration-settings/{id}` returns the channel's stored defaults.

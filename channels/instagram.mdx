@@ -1,68 +1,26 @@
 ---
-title: "Schedule Instagram with the Nushir AI Agent"
-sidebarTitle: "Instagram"
-description: "Connect Instagram once and let Nushir plan your rhythm, write captions within 2,200 characters, prepare carousels and Reels, and read results to improve next month."
+title: "Instagram"
+description: "Connecting Instagram, and the rules it enforces."
 ---
 
-Instagram rewards consistency — but batching a week's worth of captions, sourcing carousel images, and timing posts around your audience's activity takes hours you could spend elsewhere. Nushir's AI agent handles all of that. Connect your account once, set your tone and any content restrictions, and the agent starts building a monthly plan. Every draft appears in your calendar for review; nothing goes live until you say so.
-
-## Platform Specs
-
-| Property | Detail |
+| | |
 |---|---|
-| **Content types** | Photos, Carousel, Reels, Stories |
-| **Text limit** | 2,200 characters |
-| **Media** | Up to 10 photos in a carousel |
-| **Link placement** | Link in bio or first comment |
+| API identifier | `instagram` |
+| Account required | **Business or Creator**, linked to a Facebook Page. |
+| Media | **Required** — no text-only posts. |
+| Multi-part posts | Follow-up comments. |
+| Analytics | Account and post metrics. |
 
-## What the Agent Does
+## Connecting
 
-<Steps>
-  <Step title="Plans your posting rhythm">
-    The agent analyses how often Instagram rewards your account and how much volume your audience can absorb before engagement drops. It spaces topics across the month so your feed stays varied and consistent without overwhelming your followers.
-  </Step>
-  <Step title="Writes captions in your tone">
-    Every caption is written within Instagram's 2,200-character limit, in your chosen voice, in Arabic or English. The agent applies your content restrictions — topics to avoid, phrases you never use, hashtag preferences — on every draft without you having to repeat them.
-  </Step>
-  <Step title="Prepares your media">
-    For carousel posts, the agent pulls up to 10 images from your media library first, then generates brand-consistent images if your library comes up short. Images are sized and cropped for Instagram's aspect ratio before they land in the draft.
-  </Step>
-  <Step title="Reads results after publishing">
-    After each post goes live, the agent collects your Instagram engagement data — reach, saves, comments, best-performing times — and feeds those signals into the plan it builds for next month.
-  </Step>
-</Steps>
+**Add Channel → Instagram**, approve access on the platform, and you are returned
+here. See [connect a channel](/guide/channels/connect) for the general flow.
 
-## How to Connect Instagram
+## Worth knowing
 
-<Steps>
-  <Step title="Add the channel">
-    In your Nushir dashboard, click **Add Channel** and select **Instagram**.
-  </Step>
-  <Step title="Authenticate with Meta">
-    You'll be redirected to Facebook/Meta's login. Sign in with the account that manages your Instagram. Review the permissions list — Nushir requests only what it needs to read your profile and publish posts — then click **Allow**.
-  </Step>
-  <Step title="Set your tone and restrictions">
-    Back in Nushir, choose your language (Arabic or English), describe your brand voice, and add any topics or phrases the agent should avoid.
-  </Step>
-  <Step title="Review your first drafts">
-    The agent builds your first batch of drafts and places them in the calendar. Open any draft to edit the caption, swap an image, or reschedule. When you're happy, approve it — and it publishes at the scheduled time.
-  </Step>
-</Steps>
+`post_type` selects post, reel or story. A personal account can connect but never publish; switch it in the Instagram app first.
 
-<Note>
-  You can revoke Instagram's access at any time from **Channel Settings** inside Nushir, or directly from your Facebook/Meta account's connected apps page.
-</Note>
+## Posting over the API
 
-## Frequently Asked Questions
-
-<AccordionGroup>
-  <Accordion title="Does the agent publish without my approval?">
-    No. Every draft is placed in your calendar with a **Pending** status by default. Auto-publish is an opt-in setting you can enable per channel from the channel settings page — it is never on by default.
-  </Accordion>
-  <Accordion title="Does each Instagram account count as one channel slot?">
-    Yes. Each connected Instagram account uses one channel slot from your plan. If you manage multiple Instagram accounts, each one counts separately. See the [pricing page](https://nushir.com/pricing.html) for channel limits per plan.
-  </Accordion>
-  <Accordion title="Can I publish to Instagram via the API or MCP?">
-    Yes. Nushir supports REST API and MCP publishing on all channels, including Instagram. This lets you trigger posts from your own tools, agents, or automation workflows. See the [API & MCP documentation](/channels/overview#custom-channel) for details.
-  </Accordion>
-</AccordionGroup>
+Use `instagram` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/api-reference/channel-settings).

@@ -1,0 +1,58 @@
+---
+title: "How Nushir works"
+description: "The words Nushir uses, defined once."
+---
+
+## Channel
+
+One connected social account — a TikTok creator account, a LinkedIn page, a
+Facebook page. Connecting the same platform twice gives you two channels.
+
+<Note>
+The API calls this an **integration**. Same object, different name; the API
+predates the interface wording.
+</Note>
+
+## Post and post group
+
+A **post** is what goes to one channel at one time.
+
+Selecting four channels in the composer creates four posts that share a **group**.
+The group is what lets Nushir treat them as one thing — delete the group and all
+four go, and the calendar shows them together.
+
+This is why the API has both `DELETE /posts/{id}` and
+`DELETE /posts/group/{group}`.
+
+## Part
+
+A post can have several parts. On platforms that support threads, the parts
+publish as a thread. On platforms that do not, the later parts publish as
+comments on the first.
+
+## Slot
+
+A time a channel normally posts. Slots exist so scheduling can answer "when is
+the next sensible time for this channel?" without you keeping the schedule in
+your head. See [posting times](/guide/channels/time-slots).
+
+## Client group
+
+A grouping of channels belonging to one client, so an agency can filter the
+calendar to that client. Called `customer` in the API.
+
+## Plug
+
+A rule that runs automatically after a post performs — auto-repost, or
+auto-comment once a post passes a threshold. See [plugs](/guide/automations/plugs).
+
+## State
+
+Every post is in exactly one state:
+
+| State | Meaning |
+|---|---|
+| `DRAFT` | Saved, never publishes. Skips settings validation. |
+| `QUEUE` | Scheduled. Will publish at its date. |
+| `PUBLISHED` | Sent to the platform successfully. |
+| `ERROR` | Publishing was attempted and the platform rejected it. |

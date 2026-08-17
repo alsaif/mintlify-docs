@@ -1,0 +1,39 @@
+---
+title: "API keys"
+description: "Create a key, and keep it safe."
+---
+
+Settings → developers.
+
+## Creating a key
+
+Generate one and copy it immediately. It authenticates as your **organisation** —
+anything the key can reach, it can change.
+
+## Using it
+
+Send it raw on the `Authorization` header. No `Bearer` prefix:
+
+```bash
+curl https://platform.nushir.com/api/public/v1/integrations \
+  -H "Authorization: $NUSHIR_API_KEY"
+```
+
+## Keeping it safe
+
+<Warning>
+The key can publish, delete posts and disconnect channels. Treat it as a
+password.
+
+Never put it in browser code — a key in a frontend bundle is public. All calls
+belong on your server.
+</Warning>
+
+Store it in an environment variable or a secret manager, never in the
+repository. If one leaks, revoke it here; revocation is immediate.
+
+## OAuth apps
+
+Where you are building something other people connect *their* Nushir account to,
+use an OAuth app rather than sharing keys. Those tokens carry a `pos_` prefix and
+resolve to the granting organisation.

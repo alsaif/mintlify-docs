@@ -1,0 +1,45 @@
+---
+title: "Analytics"
+description: "Which platforms report metrics, and what they report."
+---
+
+Two levels: per channel, and per post.
+
+## Per channel
+
+Followers and reach over time, for platforms that expose an account-level API.
+
+## Per post
+
+Views, likes, comments and shares, where the platform reports them. Only
+meaningful once a post has published.
+
+## Coverage is uneven
+
+This is the part worth understanding: **what you see depends entirely on what
+each platform exposes.** Nushir shows nothing rather than estimating.
+
+| Reporting | Platforms |
+|---|---|
+| Account and post metrics | Instagram, TikTok, LinkedIn, Facebook, YouTube, Pinterest |
+| Limited or post-only | X, Threads, Reddit |
+| Nothing | Most chat and blogging platforms |
+
+A platform that reports nothing returns an empty result, not an error.
+
+## Timing
+
+Platforms populate metrics on their own schedule — usually within a day, and
+almost never instantly. An empty result an hour after publishing is normal.
+
+## Over the API
+
+```bash
+# per channel
+curl https://platform.nushir.com/api/public/v1/analytics/CHANNEL_ID \
+  -H "Authorization: $NUSHIR_API_KEY"
+
+# per post
+curl https://platform.nushir.com/api/public/v1/analytics/post/POST_ID \
+  -H "Authorization: $NUSHIR_API_KEY"
+```

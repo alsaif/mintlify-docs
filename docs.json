@@ -1,23 +1,48 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Nushir",
   "theme": "willow",
-  "logo": {
-    "light": "https://media.brand.dev/f6809c03-35c4-4fde-93ed-ed2ebcab5b95.png",
-    "dark": "https://media.brand.dev/f6809c03-35c4-4fde-93ed-ed2ebcab5b95.png"
-  },
-  "favicon": "https://media.brand.dev/f9320006-42f4-4cdb-9ded-c574f89e3a53.png",
+  "name": "Nushir",
+  "description": "Plan, schedule and publish social content across every channel from one calendar.",
   "colors": {
-    "primary": "#462c7d",
-    "light": "#a4a3a6",
-    "dark": "#dcdbdd"
+    "primary": "#A8632A",
+    "light": "#D68F4E",
+    "dark": "#121110"
+  },
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://nushir.com"
   },
   "navbar": {
+    "links": [
+      { "label": "Sign in", "href": "https://platform.nushir.com/auth/login" }
+    ],
     "primary": {
       "type": "button",
-      "label": "Start Free Trial",
-      "href": "https://nushir.com"
+      "label": "Start free",
+      "href": "https://platform.nushir.com/auth"
     }
+  },
+  "footer": {
+    "links": [
+      {
+        "header": "Nushir",
+        "items": [
+          { "label": "Home", "href": "https://nushir.com" },
+          { "label": "Pricing", "href": "https://nushir.com/en/pricing.html" },
+          { "label": "Sign in", "href": "https://platform.nushir.com/auth/login" }
+        ]
+      },
+      {
+        "header": "Legal",
+        "items": [
+          { "label": "Terms", "href": "https://nushir.com/en/terms.html" },
+          { "label": "Privacy", "href": "https://nushir.com/en/privacy.html" },
+          { "label": "Cookies", "href": "https://nushir.com/en/cookies.html" }
+        ]
+      }
+    ]
   },
   "navigation": {
     "tabs": [
@@ -25,133 +50,121 @@
         "tab": "Guide",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Get started",
             "pages": [
-              "introduction",
-              "quickstart",
-              "connecting-channels",
-              "brand-setup"
+              "index",
+              "guide/quickstart",
+              "guide/concepts",
+              "guide/where-things-live"
             ]
           },
           {
-            "group": "The Agents",
+            "group": "Channels",
             "pages": [
-              "agents/overview",
-              "agents/planner",
-              "agents/writer",
-              "agents/designer",
-              "agents/analyst"
+              "guide/channels/connect",
+              "guide/channels/manage",
+              "guide/channels/time-slots",
+              "guide/channels/customers"
             ]
           },
           {
-            "group": "Calendar & Publishing",
+            "group": "Writing a post",
             "pages": [
-              "publishing/calendar",
-              "publishing/composing-posts",
-              "publishing/review-approval",
-              "publishing/cross-posting",
-              "publishing/evergreen-reposting"
+              "guide/composer/overview",
+              "guide/composer/global-vs-per-channel",
+              "guide/composer/media",
+              "guide/composer/threads-and-comments",
+              "guide/composer/scheduling",
+              "guide/composer/validation"
             ]
           },
           {
-            "group": "Account & Billing",
+            "group": "Calendar and posts",
             "pages": [
-              "account/plans-pricing",
-              "account/add-ons",
-              "account/team-members",
-              "account/workspaces"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Channels",
-        "groups": [
-          {
-            "group": "Social Networks",
-            "pages": [
-              "channels/overview",
-              "channels/instagram",
-              "channels/x",
-              "channels/facebook",
-              "channels/linkedin",
-              "channels/threads",
-              "channels/bluesky",
-              "channels/mastodon"
-            ]
-          },
-          {
-            "group": "Video Platforms",
-            "pages": [
-              "channels/tiktok",
-              "channels/youtube",
-              "channels/snapchat",
-              "channels/twitch",
-              "channels/kick",
-              "channels/vimeo",
-              "channels/rumble"
-            ]
-          },
-          {
-            "group": "Long-Form & Blogs",
-            "pages": [
-              "channels/wordpress",
-              "channels/medium",
-              "channels/hashnode",
-              "channels/devto",
-              "channels/pinterest",
-              "channels/rss",
-              "channels/mailchimp"
-            ]
-          },
-          {
-            "group": "Communities & Messaging",
-            "pages": [
-              "channels/telegram",
-              "channels/whatsapp",
-              "channels/discord",
-              "channels/slack",
-              "channels/reddit",
-              "channels/googlemaps",
-              "channels/custom-channel"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API & Automation",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "api/introduction",
-              "api/authentication"
-            ]
-          },
-          {
-            "group": "Endpoints",
-            "pages": [
-              "api/posts",
-              "api/channels",
-              "api/analytics"
+              "guide/calendar",
+              "guide/approvals",
+              "guide/analytics",
+              "guide/media-library"
             ]
           },
           {
             "group": "Automation",
             "pages": [
-              "api/webhooks",
-              "api/mcp-server",
-              "api/cli"
+              "guide/automations/plugs",
+              "guide/automations/rss",
+              "guide/automations/webhooks"
             ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "guide/settings/team",
+              "guide/settings/developers"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "account/plans",
+              "account/billing"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "guide/troubleshooting/connecting",
+              "guide/troubleshooting/publishing",
+              "guide/troubleshooting/media"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Platforms",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["channels/overview"]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "channels/x",
+              "channels/linkedin",
+              "channels/facebook",
+              "channels/instagram",
+              "channels/threads",
+              "channels/tiktok",
+              "channels/youtube",
+              "channels/pinterest",
+              "channels/reddit",
+              "channels/discord",
+              "channels/telegram",
+              "channels/slack",
+              "channels/mastodon",
+              "channels/bluesky"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/authentication",
+              "api-reference/errors",
+              "api-reference/channel-settings"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "openapi": "api-reference/openapi.yaml"
           }
         ]
       }
     ]
-  },
-  "footer": {
-    "socials": {
-      "twitter": "https://x.com/nushir",
-      "instagram": "https://instagram.com/nushir"
-    }
   }
 }

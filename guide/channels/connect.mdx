@@ -1,0 +1,49 @@
+---
+title: "Connect a channel"
+description: "The ways a platform connects, and what to do when one fails."
+---
+
+**Add Channel**, pick a platform, approve access on the platform, and you are
+returned to Nushir with the channel connected.
+
+## What you are approving
+
+Nushir asks each platform for the narrowest set of permissions that still lets
+it do the job: read your profile so the channel can be labelled, read your
+published posts so a scheduled post can be confirmed, and publish on your behalf.
+
+You can withdraw access at any time — from the channel menu here, or from the
+platform's own connected-apps settings.
+
+## Account types
+
+Several platforms only expose publishing to certain account types. This is the
+platform's restriction, not Nushir's, and it is the most common reason a
+connection appears to work but cannot publish:
+
+| Platform | Requirement |
+|---|---|
+| Instagram | Business or Creator account |
+| Facebook | A Page — personal profiles cannot be published to |
+| TikTok | Publishing needs the app approved for the Content Posting API |
+| LinkedIn Page | You must be an administrator of the page |
+
+## When it fails
+
+<AccordionGroup>
+  <Accordion title="Sent back with an error immediately">
+    Usually a mismatch between the redirect URL registered with the platform and
+    the one used. On a hosted account this is our side — contact support.
+  </Accordion>
+
+  <Accordion title="Connected, but shows as needing reconnection">
+    The token was accepted then rejected. Almost always an account-type problem:
+    the account is personal where the platform requires business, or the page is
+    not one you administer.
+  </Accordion>
+
+  <Accordion title="Connected, then stops working weeks later">
+    Normal. Several platforms expire tokens on a fixed cycle, and changing your
+    password on the platform revokes them. Reconnect from the channel menu.
+  </Accordion>
+</AccordionGroup>

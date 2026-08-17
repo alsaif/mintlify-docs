@@ -1,68 +1,26 @@
 ---
-title: "Schedule Threads Posts with the Nushir AI Agent"
-sidebarTitle: "Threads"
-description: "Connect Threads once and let Nushir plan your cadence, write within 500 characters, prepare up to 10 attachments, and publish in sync with your Instagram schedule."
+title: "Threads"
+description: "Connecting Threads, and the rules it enforces."
 ---
 
-Threads is built for conversation — short, direct posts that invite replies rather than passive scrolling. Because it shares your Instagram identity, it's a natural second channel for anyone already active on Instagram, and Nushir treats it that way. Connect Threads once and the agent plans a cadence, writes each post within 500 characters, attaches up to 10 images, and can publish in parallel with an Instagram post when your content suits both platforms. Every draft waits in your calendar for approval before going live.
-
-## Platform Specs
-
-| Property | Detail |
+| | |
 |---|---|
-| **Content types** | Posts, Threads, Images |
-| **Text limit** | 500 characters |
-| **Media** | Up to 10 attachments per post |
-| **Instagram sync** | Can publish in parallel with a matching Instagram post |
+| API identifier | `threads` |
+| Account required | Any Threads account. |
+| Media | Optional. |
+| Multi-part posts | Native thread. |
+| Analytics | Post metrics only. |
 
-## What the Agent Does
+## Connecting
 
-<Steps>
-  <Step title="Plans your posting rhythm">
-    The agent establishes a Threads cadence that complements — rather than duplicates — your Instagram schedule. It spaces topics to keep your Threads feed active and conversational without mirroring your Instagram captions word for word.
-  </Step>
-  <Step title="Writes within 500 characters in your tone">
-    Threads rewards concise, direct writing. The agent adapts each idea to the 500-character limit, choosing a more conversational register than it would for LinkedIn or Facebook, and writes in Arabic or English according to your preferences. Your tone settings and content restrictions carry over from your account defaults.
-  </Step>
-  <Step title="Prepares up to 10 attachments">
-    The agent pulls images from your media library and attaches up to 10 per post, resized for Threads' display format. If suitable images aren't available, it generates on-brand alternatives. When a post is scheduled to publish alongside an Instagram carousel, the same images can be reused automatically.
-  </Step>
-  <Step title="Reads results after publishing">
-    After each post, the agent reads your Threads engagement data — views, likes, replies, reposts — and feeds those numbers back into the monthly plan to improve timing and topic choices.
-  </Step>
-</Steps>
+**Add Channel → Threads**, approve access on the platform, and you are returned
+here. See [connect a channel](/guide/channels/connect) for the general flow.
 
-## How to Connect Threads
+## Worth knowing
 
-<Steps>
-  <Step title="Add the channel">
-    In your Nushir dashboard, click **Add Channel** and select **Threads**.
-  </Step>
-  <Step title="Authenticate via Instagram">
-    Threads uses the same Meta authentication as Instagram. Sign in with your Instagram credentials, review the permissions, and click **Allow**. If you've already connected Instagram, Nushir may offer to link Threads in one additional click.
-  </Step>
-  <Step title="Set your tone and restrictions">
-    Configure language, brand voice, and content restrictions for Threads. You can keep these identical to your Instagram settings or use a more casual tone for Threads specifically.
-  </Step>
-  <Step title="Review drafts in your calendar">
-    Threads drafts appear in the same calendar as all your other channels. Approve them individually, or — when the content works on both — approve an Instagram + Threads pair together.
-  </Step>
-</Steps>
+Shares Meta's app configuration with Instagram but is a separate channel and a separate connection.
 
-<Note>
-  You can revoke Threads access at any time from **Channel Settings** in Nushir, or from the connected apps section of your Instagram account.
-</Note>
+## Posting over the API
 
-## Frequently Asked Questions
-
-<AccordionGroup>
-  <Accordion title="Does the agent post to Threads without my approval?">
-    No. All Threads drafts default to **Pending** in your calendar. You can opt in to auto-publish per channel from channel settings — it is never on by default.
-  </Accordion>
-  <Accordion title="Does each Threads account count as one channel slot?">
-    Yes. Your Threads account is counted as one channel slot, separate from Instagram even though they share a Meta login. See the [pricing page](https://nushir.com/pricing.html) for slot limits per plan.
-  </Accordion>
-  <Accordion title="Can I publish to Threads via the API or MCP?">
-    Yes. REST API and MCP publishing are supported on Threads, just like every other Nushir channel. See the [API & MCP documentation](/channels/overview#custom-channel) for details.
-  </Accordion>
-</AccordionGroup>
+Use `threads` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/api-reference/channel-settings).

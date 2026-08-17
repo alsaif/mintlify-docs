@@ -1,0 +1,61 @@
+---
+title: "API introduction"
+description: "Drive Nushir from your own code."
+---
+
+Everything the calendar does — connect channels, schedule posts, read
+performance — is available over HTTP.
+
+## Base URL
+
+```
+https://platform.nushir.com/api/public/v1
+```
+
+## Your first call
+
+```bash
+curl https://platform.nushir.com/api/public/v1/integrations \
+  -H "Authorization: $NUSHIR_API_KEY"
+```
+
+Start here: nearly every other route needs an integration `id`, and posting
+needs the `identifier` to know which settings object to send.
+
+## Channel or integration?
+
+The interface says **channel**. The API says **integration**. Same object — the
+naming was never reconciled. This reference uses *integration* because that is
+what the routes are called.
+
+## Dates
+
+ISO-8601, always **UTC**. A post scheduled for `2026-09-01T09:00:00Z` publishes
+at 09:00 UTC no matter what timezone the account displays.
+
+## Posting, end to end
+
+<Steps>
+  <Step title="List channels">
+    `GET /integrations` — keep the `id` and `identifier`.
+  </Step>
+  <Step title="Upload media">
+    `POST /upload` or `POST /upload-from-url`, if the post needs it. Keep the
+    returned media `id`.
+  </Step>
+  <Step title="Pick a time">
+    `GET /find-slot/{id}` for the next free slot, or choose your own.
+  </Step>
+  <Step title="Create the post">
+    `POST /posts` with the channel, the content and that channel's `settings`.
+  </Step>
+  <Step title="Confirm">
+    `GET /posts` over the window, and `GET /analytics/post/{id}` once it is live.
+  </Step>
+</Steps>
+
+<Tip>
+Building something incrementally? Create posts with `"type": "draft"` — drafts
+skip settings validation, so you can assemble one over several calls, then use
+`/posts/{id}/missing` to see what is still outstanding.
+</Tip>

@@ -1,0 +1,49 @@
+---
+title: "Global vs per-channel content"
+description: "Write once for everything, or tailor one channel without touching the others."
+---
+
+## Global
+
+One body, every selected channel. Edit it and every channel updates.
+
+Best when the message is genuinely the same and you only care that it goes out
+everywhere.
+
+## Per-channel
+
+Switch a channel to its own content and it detaches from the shared draft.
+Editing the global text no longer affects it.
+
+Worth doing when:
+
+- A platform's character limit forces a shorter version.
+- Hashtags help on one platform and look wrong on another.
+- Only one platform should carry the link.
+
+<Warning>
+Detaching is one-way in practice. Reattaching a channel to the global draft
+discards the tailored version — the composer will ask before doing it.
+</Warning>
+
+## Over the API
+
+There is no global/per-channel distinction in the API. Each entry in `posts`
+carries its own `value` array, so you send the final text per channel:
+
+```json
+{
+  "type": "schedule",
+  "date": "2026-09-01T09:00:00Z",
+  "posts": [
+    {
+      "integration": { "id": "CHANNEL_A" },
+      "value": [{ "content": "The long version, for LinkedIn." }]
+    },
+    {
+      "integration": { "id": "CHANNEL_B" },
+      "value": [{ "content": "The short version." }]
+    }
+  ]
+}
+```

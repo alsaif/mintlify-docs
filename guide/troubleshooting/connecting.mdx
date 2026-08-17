@@ -1,0 +1,35 @@
+---
+title: "Channel connection problems"
+description: "Why a connection fails, and what actually fixes it."
+---
+
+<AccordionGroup>
+  <Accordion title="The platform sends me back with an error">
+    Usually a redirect-URL mismatch between what the platform has registered and
+    what was used. On a hosted account that is our configuration — contact
+    support with the platform name and the time.
+  </Accordion>
+
+  <Accordion title="Connected, but immediately needs reconnecting">
+    Almost always the account type. Instagram needs Business or Creator;
+    Facebook needs a Page you administer, not a personal profile. The platform
+    grants the token, then refuses the publishing scope.
+  </Accordion>
+
+  <Accordion title="Worked for weeks, then stopped">
+    Expected. Several platforms expire tokens on a cycle, and changing your
+    password on the platform revokes them immediately. Reconnect from the
+    channel menu — history and settings are preserved.
+  </Accordion>
+
+  <Accordion title="I approved it but nothing happened">
+    The approval window was closed before it returned, so the exchange never
+    completed. Start again and let it redirect on its own.
+  </Accordion>
+
+  <Accordion title="TikTok connects but will not publish">
+    Publishing needs the app approved for TikTok's Content Posting API. Until
+    that approval lands, posts can be created but may be restricted to
+    creator-only visibility. This is a TikTok review requirement, not a setting.
+  </Accordion>
+</AccordionGroup>

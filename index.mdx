@@ -1,59 +1,46 @@
 ---
-title: "Nushir: AI Agents for Social Publishing"
-sidebarTitle: "Home"
-description: "Nushir plans, writes, designs, and schedules your content across 30+ channels. Four AI agents do the work — you review and approve."
+title: "Nushir"
+description: "Plan, schedule and publish social content across every channel from one calendar."
 ---
 
-Nushir is an AI-powered social publishing platform built for Arabic-speaking creators, agencies, and teams. Four intelligent agents — Planner, Writer, Designer, and Analyst — handle the entire content lifecycle across 30+ channels, while you stay in control through a single shared calendar.
+Nushir connects your social accounts, then gives you one calendar to plan, write,
+schedule and measure everything you publish to them.
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/quickstart">
-    Connect your first channel and get a draft post in minutes.
+  <Card title="Schedule your first post" icon="rocket" href="/guide/quickstart">
+    From an empty account to a scheduled post, in five steps.
   </Card>
-  <Card title="The Agents" icon="robot" href="/agents/overview">
-    Learn how the Planner, Writer, Designer, and Analyst agents work together.
+  <Card title="Connect a channel" icon="link" href="/guide/channels/connect">
+    How each platform connects, and what to do when one refuses.
   </Card>
-  <Card title="All Channels" icon="share-nodes" href="/channels/overview">
-    Browse all 30+ supported platforms and their per-channel specs.
+  <Card title="The words Nushir uses" icon="book" href="/guide/concepts">
+    Channel, post group, slot, plug — defined once, used everywhere.
   </Card>
-  <Card title="API & Automation" icon="code" href="/api/introduction">
-    Schedule posts, manage channels, and connect your own tools over HTTP.
-  </Card>
-</CardGroup>
-
-## How Nushir Works
-
-Nushir replaces the manual loop of writing, designing, and scheduling content with four agents that collaborate on your behalf. You set the goals and brand rules once — the agents take it from there.
-
-<Steps>
-  <Step title="Connect your channels">
-    Link your social accounts in one step. Each connected account counts as one channel in your plan.
-  </Step>
-  <Step title="Teach the agent your brand">
-    Upload your tone of voice, brand colors, fonts, and a list of words or promises to avoid. You only do this once.
-  </Step>
-  <Step title="Review and approve">
-    The Planner builds a monthly calendar. The Writer fills it with copy. The Designer attaches media. You open the calendar, review drafts, and approve — or edit before publishing.
-  </Step>
-  <Step title="Learn and improve">
-    After posts go live, the Analyst reads the numbers, adjusts future timing and topics, and generates a branded monthly report automatically.
-  </Step>
-</Steps>
-
-## Pick Your Path
-
-<CardGroup cols={3}>
-  <Card title="Using Nushir" icon="calendar" href="/introduction">
-    How the product works: channels, agents, the calendar, and settings.
-  </Card>
-  <Card title="Channel Guides" icon="plug" href="/channels/overview">
-    Platform-specific specs, content types, and connection steps.
-  </Card>
-  <Card title="Developers" icon="terminal" href="/api/introduction">
-    REST API, webhooks, MCP server, and CLI reference.
+  <Card title="API reference" icon="code" href="/api-reference/introduction">
+    Drive the whole thing from your own code.
   </Card>
 </CardGroup>
 
-<Note>
-  Nushir defaults to **draft mode** — nothing is published without your explicit approval. Auto-publish is an opt-in setting you enable per channel.
-</Note>
+## What it does
+
+**One calendar, every channel.** Write once and send it everywhere, or tailor the
+wording per platform without maintaining several drafts.
+
+**Scheduling that respects each platform.** Every channel carries its own posting
+times and its own rules — character limits, media requirements, privacy options.
+Nushir enforces them before you schedule, not after publishing fails.
+
+**Arabic and English throughout.** The interface, the calendar and the composer
+all run right-to-left when Arabic is selected.
+
+## What it does not do
+
+Worth knowing up front, because these are the things people expect and do not get:
+
+- **Publishing is never guaranteed.** Nushir schedules and calls each platform's
+  API. Platforms have outages, revoke tokens, and change their rules. A post can
+  fail for reasons no scheduler controls.
+- **Not every platform reports analytics.** Where a platform exposes no metrics
+  API, Nushir shows nothing rather than inventing a number.
+- **Deleting a published post in Nushir does not delete it from the platform.**
+  It removes the record here only.

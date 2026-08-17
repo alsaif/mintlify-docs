@@ -1,0 +1,29 @@
+---
+title: "Webhooks"
+description: "Notify another system when Nushir publishes."
+---
+
+Register a URL and Nushir calls it when a post publishes, so another system can
+react — log it, notify a channel, kick off a report.
+
+## Setting one up
+
+Settings → webhooks. Give a URL and choose the channels it covers.
+
+## Receiving
+
+Nushir sends a POST with a JSON body identifying the post, the channel and the
+result.
+
+Two things every receiver should do:
+
+1. **Return quickly.** Acknowledge, then do the work asynchronously. A slow
+   endpoint looks like a failure and will be retried.
+2. **Be idempotent.** A retry can deliver the same event twice. Key on the post
+   id so a duplicate delivery does not double-apply.
+
+## Not to be confused with
+
+These are Nushir's outbound notifications. Inbound webhooks *from* a platform
+(a TikTok or Meta callback) are part of connecting a channel and are handled
+internally.

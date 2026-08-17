@@ -1,0 +1,43 @@
+---
+title: "Scheduling and publishing"
+description: "Draft, schedule, post now."
+---
+
+Three ways to leave the composer.
+
+## Draft
+
+Saved, never publishes. **Drafts skip settings validation**, so this is how you
+park something incomplete — a post with no privacy level set, or missing its
+image.
+
+Before promoting a draft, ask what is still missing:
+
+```bash
+curl https://platform.nushir.com/api/public/v1/posts/POST_ID/missing \
+  -H "Authorization: $NUSHIR_API_KEY"
+```
+
+## Schedule
+
+Queued for its date and published by the server. Nothing needs to stay open.
+
+## Post now
+
+Publishes immediately. Same path as scheduling, without the wait.
+
+## What happens at publish time
+
+Nushir calls each platform in turn. Per channel, one of three things happens:
+
+- **Success** — the post moves to published and records the returned URL.
+- **Rejection** — the post moves to error and keeps the platform's message.
+- **Token failure** — the channel is flagged for reconnection.
+
+One channel failing does not stop the others in the group.
+
+<Warning>
+Publishing is never guaranteed. Platforms have outages, revoke tokens, and
+change their rules without notice. Anything time-critical deserves a check that
+it actually went out.
+</Warning>

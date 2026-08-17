@@ -1,0 +1,729 @@
+openapi: 3.1.0
+info:
+  title: Nushir Public API
+  version: "1.0.0"
+  description: |
+    Schedule, publish and measure social posts on Nushir from your own code.
+
+    Every route below is derived from the running application
+    (`public.integrations.controller.ts`), so this document describes what the
+    API actually does rather than what it is intended to do.
+
+    ## Base URL
+
+    ```
+    https://platform.nushir.com/api/public/v1
+    ```
+
+    ## Authentication
+
+    Send your key in the `Authorization` header. There is no `Bearer` prefix.
+
+    ```
+    Authorization: your-api-key
+    ```
+
+    Two kinds of credential are accepted on the same header:
+
+    - **An API key**, created in *Settings → Developers*. It is scoped to the
+      organisation that created it.
+    - **An OAuth token**, issued to an approved app. These are recognised by
+      their `pos_` prefix and resolve to the organisation that granted access.
+
+    A missing or unrecognised credential returns `401`.
+
+    ## Channel or integration?
+
+    The interface says **channel**. The API says **integration**. They are the
+    same object; the name simply never got reconciled. Anywhere this document
+    says *integration*, the calendar calls it a channel.
+
+    ## Dates
+
+    All dates are ISO-8601 in **UTC**. A post scheduled for `2026-09-01T09:00:00Z`
+    publishes at 09:00 UTC regardless of the timezone on the account.
+
+    ## Errors
+
+    | Status | Meaning |
+    |---|---|
+    | `400` | The body failed validation. The response names the offending fields. |
+    | `401` | Missing or invalid `Authorization` header. |
+    | `403` | Authenticated, but the plan does not permit the action. |
+    | `404` | No such object **in your organisation**. |
+
+    A `404` is returned rather than `403` when an object exists but belongs to
+    someone else, so the API never confirms that another organisation's id is
+    real.
+servers:
+  - url: https://platform.nushir.com/api/public/v1
+    description: Production
+security:
+  - apiKey: []
+tags:
+  - name: Integrations
+    description: The connected social channels.
+  - name: Posts
+    description: Create, schedule, inspect and delete posts.
+  - name: Uploads
+    description: Get media into the library so a post can reference it.
+  - name: Analytics
+    description: Performance figures, where the platform reports them.
+  - name: Notifications
+    description: Account-level messages.
+  - name: Video
+    description: Generated video, where enabled.
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        Your API key from *Settings → Developers*, or an OAuth token beginning
+        `pos_`. Sent raw — do **not** prefix it with `Bearer`.
+  schemas:
+    Integration:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Use this wherever a route takes an integration id.
+        name:
+          type: string
+          description: The channel's display name, as shown on the calendar.
+        identifier:
+          type: string
+          description: >-
+            The platform this channel posts to — `x`, `linkedin`, `tiktok`,
+            `instagram`, and so on. This value decides which `settings` object
+            a post must carry.
+          example: tiktok
+        picture:
+          type: string
+          description: Avatar URL, as reported by the platform.
+        disabled:
+          type: boolean
+          description: >-
+            A disabled channel stays on the account and keeps its history, but
+            is skipped when a post is published.
+        profile:
+          type: string
+          description: The handle or profile id on the platform.
+        customer:
+          type: object
+          nullable: true
+          description: The client group this channel belongs to, if any.
+          properties:
+            id: { type: string }
+            name: { type: string }
+    MediaItem:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+          description: An id returned by one of the upload routes.
+        path:
+          type: string
+          description: Public URL of the stored file.
+    PostContent:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+          description: >-
+            The body of this part of the post, as HTML. It is sanitised on
+            arrival, so unsupported markup is stripped rather than rejected.
+        id:
+          type: string
+          description: Present when updating an existing part.
+        image:
+          type: array
+          items: { $ref: '#/components/schemas/MediaItem' }
+    PostGroup:
+      type: object
+      required: [integration, value]
+      properties:
+        integration:
+          type: object
+          required: [id]
+          properties:
+            id: { type: string }
+        value:
+          type: array
+          minItems: 1
+          description: >-
+            One entry per part of the post. A single entry is an ordinary post;
+            several entries make a thread on platforms that support one, and
+            become follow-up comments on those that do not.
+          items: { $ref: '#/components/schemas/PostContent' }
+        group:
+          type: string
+          description: >-
+            Identifies posts created together across several channels, so they
+            can be deleted or rescheduled as one unit.
+        settings:
+          type: object
+          description: >-
+            Platform-specific options for this channel. The required shape
+            depends on the channel's `identifier` — see **Channel settings**.
+          additionalProperties: true
+    Post:
+      type: object
+      properties:
+        id: { type: string }
+        content: { type: string }
+        publishDate:
+          type: string
+          format: date-time
+        releaseURL:
+          type: string
+          nullable: true
+          description: The live URL, once the platform has returned one.
+        state:
+          type: string
+          enum: [QUEUE, PUBLISHED, ERROR, DRAFT]
+        integration: { $ref: '#/components/schemas/Integration' }
+    Error:
+      type: object
+      properties:
+        statusCode: { type: integer }
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items: { type: string }
+        error: { type: string }
+
+paths:
+  /integrations:
+    get:
+      tags: [Integrations]
+      summary: List channels
+      operationId: listIntegrations
+      description: |
+        Every channel connected to your organisation, including disabled ones.
+
+        This is the route to call first: almost everything else needs an
+        integration `id`, and posting needs the `identifier` to know which
+        settings object to send.
+      responses:
+        '200':
+          description: The organisation's channels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Integration' }
+              example:
+                - id: clx7h2k9a0001
+                  name: Nushir Studio
+                  identifier: tiktok
+                  picture: https://cdn.example.com/avatar.jpg
+                  disabled: false
+                  profile: "@nushir.studio"
+                  customer: null
+        '401':
+          description: Missing or invalid credential.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /integrations/{id}:
+    delete:
+      tags: [Integrations]
+      summary: Disconnect a channel
+      operationId: deleteIntegration
+      description: |
+        Disconnects the channel and deletes the stored credentials.
+
+        Posts already published stay where they are — on the platform and in
+        your history. Posts still queued for this channel will not publish.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Disconnected. }
+        '404': { description: No such channel in your organisation. }
+
+  /integration-settings/{id}:
+    get:
+      tags: [Integrations]
+      summary: Get a channel's settings
+      operationId: getIntegrationSettings
+      description: |
+        The saved per-channel options — the defaults applied when a post does
+        not specify its own `settings`.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: The channel's stored settings.
+        '404': { description: No such channel in your organisation. }
+
+  /is-connected:
+    get:
+      tags: [Integrations]
+      summary: Check for any working channel
+      operationId: isConnected
+      description: |
+        A cheap health check: does this organisation have at least one channel
+        that could publish right now?
+
+        Useful as a pre-flight before showing a composer, so the user is told
+        to connect a channel rather than being handed a form that cannot post.
+      responses:
+        '200':
+          description: Whether a usable channel exists.
+
+  /groups:
+    get:
+      tags: [Integrations]
+      summary: List client groups
+      operationId: listGroups
+      description: |
+        Client groups bundle channels per customer, so an agency can filter the
+        calendar to one client at a time.
+      responses:
+        '200': { description: The organisation's client groups. }
+
+  /social/{integration}:
+    get:
+      tags: [Integrations]
+      summary: Begin connecting a channel
+      operationId: getIntegrationUrl
+      description: |
+        Returns the platform's authorisation URL. Send the user there; they
+        approve access on the platform and are returned to Nushir, which
+        completes the exchange and stores the credentials.
+
+        The `integration` parameter is the platform identifier — `tiktok`,
+        `linkedin`, `instagram` and so on.
+      parameters:
+        - name: integration
+          in: path
+          required: true
+          schema: { type: string }
+          example: tiktok
+      responses:
+        '200':
+          description: The URL to send the user to.
+
+  /find-slot/{id}:
+    get:
+      tags: [Posts]
+      summary: Find the next free slot
+      operationId: findSlot
+      description: |
+        Returns the next posting time that is free for this channel, according
+        to its configured time slots and what is already scheduled.
+
+        This is how you schedule "the next sensible time" without reimplementing
+        the slot rules yourself.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: The next free datetime.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+
+  /posts:
+    get:
+      tags: [Posts]
+      summary: List posts
+      operationId: listPosts
+      description: |
+        Posts in a date window. Both bounds are required — there is no
+        unbounded listing.
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: endDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: customer
+          in: query
+          required: false
+          schema: { type: string }
+          description: Restrict to one client group.
+      responses:
+        '200':
+          description: Posts in the window.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items: { $ref: '#/components/schemas/Post' }
+        '400':
+          description: A date was missing or not a valid ISO-8601 string.
+    post:
+      tags: [Posts]
+      summary: Create a post
+      operationId: createPost
+      description: |
+        Creates a post on one or more channels.
+
+        `posts` carries one entry per channel. Each entry names its integration
+        and its own `value` array, so the same call can send tailored copy to
+        every channel rather than one message everywhere.
+
+        `type` decides what happens next:
+
+        - `schedule` — queued for `date`.
+        - `now` — published immediately.
+        - `draft` — saved, never published. Drafts skip settings validation,
+          so this is the way to park an incomplete post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, posts]
+              properties:
+                type:
+                  type: string
+                  enum: [schedule, now, draft]
+                date:
+                  type: string
+                  format: date-time
+                  description: Required when `type` is `schedule`. UTC.
+                shortLink:
+                  type: boolean
+                  description: Rewrite links through the short-link service.
+                tags:
+                  type: array
+                  items: { type: string }
+                posts:
+                  type: array
+                  minItems: 1
+                  items: { $ref: '#/components/schemas/PostGroup' }
+            examples:
+              schedule:
+                summary: Schedule one video to TikTok
+                value:
+                  type: schedule
+                  date: '2026-09-01T09:00:00Z'
+                  posts:
+                    - integration: { id: clx7h2k9a0001 }
+                      value:
+                        - content: >-
+                            Three channels, one calendar.
+                          image:
+                            - id: med_01H9
+                      settings:
+                        __type: tiktok
+                        privacy_level: PUBLIC_TO_EVERYONE
+                        content_posting_method: DIRECT_POST
+              draft:
+                summary: Park a draft, no settings needed
+                value:
+                  type: draft
+                  posts:
+                    - integration: { id: clx7h2k9a0001 }
+                      value:
+                        - content: Something for later.
+      responses:
+        '200':
+          description: Created.
+        '400':
+          description: |
+            Validation failed. The most common causes are a missing `settings`
+            object for a channel that requires one, and a post with no media on
+            a platform that will not accept text alone.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '403':
+          description: The plan's monthly post allowance is exhausted.
+
+  /posts/{id}:
+    delete:
+      tags: [Posts]
+      summary: Delete a post
+      operationId: deletePost
+      description: |
+        Deletes one post. If it has already published, this removes Nushir's
+        record — it does **not** delete anything from the platform.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Deleted. }
+        '404': { description: No such post in your organisation. }
+
+  /posts/group/{group}:
+    delete:
+      tags: [Posts]
+      summary: Delete a post group
+      operationId: deletePostGroup
+      description: |
+        Deletes every post sharing a `group` — the cross-channel counterpart to
+        deleting a single post.
+      parameters:
+        - name: group
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Deleted. }
+
+  /posts/{id}/missing:
+    get:
+      tags: [Posts]
+      summary: What is stopping this post
+      operationId: getMissingContent
+      description: |
+        Reports what a post still needs before it can publish — a required
+        settings field, a missing image, a caption over the platform's limit.
+
+        Call this before scheduling a draft, rather than discovering the problem
+        when publishing fails.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: The outstanding requirements. }
+
+  /posts/{id}/settings:
+    put:
+      tags: [Posts]
+      summary: Update per-channel settings
+      operationId: updatePostSettings
+      description: Replaces the platform-specific settings on an existing post.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200': { description: Updated. }
+
+  /posts/{id}/status:
+    put:
+      tags: [Posts]
+      summary: Change post status
+      operationId: changePostStatus
+      description: |
+        Moves a post between states — for example promoting a draft into the
+        queue, or pulling a queued post back to a draft.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [QUEUE, PUBLISHED, ERROR, DRAFT]
+      responses:
+        '200': { description: Updated. }
+
+  /posts/{id}/release-id:
+    put:
+      tags: [Posts]
+      summary: Record the published URL
+      operationId: updateReleaseId
+      description: |
+        Attaches the platform's own post id and URL to a Nushir post.
+
+        Needed when something outside Nushir did the publishing and you want the
+        calendar and analytics to know where the post ended up.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                releaseId: { type: string }
+                releaseURL: { type: string }
+      responses:
+        '200': { description: Updated. }
+
+  /upload:
+    post:
+      tags: [Uploads]
+      summary: Upload a file
+      operationId: uploadFile
+      description: |
+        Uploads media and returns an id to reference from a post's `image`
+        array.
+
+        Send `multipart/form-data`. Size limits come from the deployment's
+        upload configuration, not from this API.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The stored media item.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MediaItem' }
+
+  /upload-from-url:
+    post:
+      tags: [Uploads]
+      summary: Upload from a URL
+      operationId: uploadFromUrl
+      description: |
+        Fetches a file server-side and stores it, so a large video never has to
+        travel through your own process.
+
+        The URL must be publicly reachable — the server fetches it directly and
+        sends no credentials.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        '200':
+          description: The stored media item.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MediaItem' }
+
+  /analytics/{integration}:
+    get:
+      tags: [Analytics]
+      summary: Channel analytics
+      operationId: getChannelAnalytics
+      description: |
+        Account-level figures for one channel — followers, views and the like.
+
+        What comes back is whatever the platform reports. Platforms that expose
+        no analytics API return an empty result rather than an error.
+      parameters:
+        - name: integration
+          in: path
+          required: true
+          schema: { type: string }
+        - name: date
+          in: query
+          required: false
+          schema: { type: string }
+          description: Days of history to return.
+      responses:
+        '200': { description: The metrics the platform reported. }
+
+  /analytics/post/{postId}:
+    get:
+      tags: [Analytics]
+      summary: Post analytics
+      operationId: getPostAnalytics
+      description: |
+        Per-post performance, for platforms that report it. Only meaningful
+        once the post has published.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: The metrics the platform reported. }
+
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: List notifications
+      operationId: listNotifications
+      description: Account notifications, newest first.
+      responses:
+        '200': { description: The organisation's notifications. }
+
+  /generate-video:
+    post:
+      tags: [Video]
+      summary: Generate a video
+      operationId: generateVideo
+      description: |
+        Starts a generation job on the configured video provider. Available
+        only when the deployment has one configured, and it consumes plan
+        credits.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200': { description: The generation job. }
+        '403': { description: Not enabled, or no credits remaining. }
+
+  /video/function:
+    post:
+      tags: [Video]
+      summary: Call a video provider function
+      operationId: videoFunction
+      description: >-
+        Invokes a named function on the video provider — used by the composer
+        to drive provider-specific steps.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200': { description: The provider's response. }

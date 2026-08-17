@@ -1,0 +1,38 @@
+---
+title: "Threads and comments"
+description: "Multi-part posts, and what each platform does with them."
+---
+
+Add a part in the composer and the post becomes multi-part.
+
+## What each platform does
+
+| Behaviour | Platforms |
+|---|---|
+| Publishes as a native thread | X, Bluesky, Mastodon, Threads |
+| Publishes the first part, then the rest as comments | Most others |
+
+Either way the parts arrive in order, and the composer shows which behaviour
+applies before you schedule.
+
+## Delays
+
+A part can carry a delay, so a follow-up comment does not land in the same
+second as the post. Useful where an immediate self-comment reads as automated.
+
+## Over the API
+
+Parts are entries in `value`:
+
+```json
+{
+  "integration": { "id": "CHANNEL_ID" },
+  "value": [
+    { "content": "The opening line." },
+    { "content": "The follow-up." },
+    { "content": "The link.", "delay": 300 }
+  ]
+}
+```
+
+`delay` is in seconds, measured from the previous part.

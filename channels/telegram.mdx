@@ -1,74 +1,26 @@
 ---
-title: "Schedule Telegram Channel Messages with Nushir"
-sidebarTitle: "Telegram"
-description: "Connect your Telegram channel once and let Nushir's AI agent plan, write, and schedule messages — albums, files, and buttons included — while you stay in control."
+title: "Telegram"
+description: "Connecting Telegram, and the rules it enforces."
 ---
 
-Nushir treats Telegram as a first-class publishing destination. Connect your channel once, and the AI agent takes care of the entire content cycle — from planning how often to post, to writing within Telegram's 4,096-character limit, to preparing albums and file attachments — then stops and waits for your approval before anything goes live.
-
-## Channel Specs
-
-| Property | Detail |
+| | |
 |---|---|
-| **Content types** | Channel messages, images, files |
-| **Text limit** | 4,096 characters |
-| **Media** | Albums and files |
-| **Platform features** | Inline buttons and links |
+| API identifier | `telegram` |
+| Account required | The bot must be an administrator of the channel. |
+| Media | Optional. |
+| Multi-part posts | Follow-up messages. |
+| Analytics | None. |
 
-## What the Agent Does
+## Connecting
 
-<Steps>
-  <Step title="Plans your rhythm">
-    The agent knows how many posts a Telegram channel can comfortably absorb each week and distributes your topics so your subscribers never feel overwhelmed.
-  </Step>
-  <Step title="Writes within platform limits">
-    Your idea is shaped specifically for Telegram — up to 4,096 characters — in your brand voice, in English or Arabic, at whatever tone you've set for this channel.
-  </Step>
-  <Step title="Prepares media">
-    Albums and file attachments are assembled on-brand, drawing from your media library first and falling back to AI generation when needed.
-  </Step>
-  <Step title="Reads the results">
-    After publishing, Telegram analytics feed back into next month's plan: better send times and topics worth repeating.
-  </Step>
-</Steps>
+**Add Channel → Telegram**, approve access on the platform, and you are returned
+here. See [connect a channel](/guide/channels/connect) for the general flow.
 
-## How to Connect
+## Worth knowing
 
-<Steps>
-  <Step title="Add the channel">
-    In Nushir, go to **Settings → Channels → Add Channel** and select **Telegram**. You'll be shown the exact permissions requested before you approve.
-  </Step>
-  <Step title="Authenticate">
-    Complete the Telegram OAuth flow. Nushir receives only the publishing permissions you explicitly grant.
-  </Step>
-  <Step title="Set your tone and restrictions">
-    Tell the agent your brand voice, any topics to avoid, and your preferred posting frequency for this channel.
-  </Step>
-  <Step title="Review drafts in the calendar">
-    Drafts appear in your content calendar. Approve, edit, or reschedule each one before it publishes.
-  </Step>
-</Steps>
+Posts to a channel or group. Adding the bot without admin rights is the usual cause of a silent failure.
 
-<Note>
-  You can revoke Nushir's access to your Telegram channel at any time — either from Nushir's channel settings or directly from within Telegram itself.
-</Note>
+## Posting over the API
 
-## FAQ
-
-<AccordionGroup>
-  <Accordion title="Will Nushir publish without my approval?">
-    No. The default mode is **draft** — every post sits in your calendar waiting for your sign-off. If you want hands-free publishing for this channel, you can opt in to auto-publish from the channel settings.
-  </Accordion>
-  <Accordion title="How does this count against my plan?">
-    Each connected Telegram account uses one channel slot in your plan. See the [pricing page](https://nushir.com/pricing.html) for slot limits per tier.
-  </Accordion>
-  <Accordion title="Can I publish from my own agent or via API?">
-    Yes. Nushir supports publishing to Telegram through the REST API and via MCP, so you can trigger posts programmatically or from your own AI agent.
-  </Accordion>
-  <Accordion title="Does the agent understand Telegram-specific formatting?">
-    Yes. The Writer agent knows Telegram's markdown and HTML formatting options and applies them to make your messages render correctly in the channel.
-  </Accordion>
-  <Accordion title="Can I schedule posts to multiple Telegram channels?">
-    Each connected Telegram channel is a separate channel slot. Add as many as your plan allows, and the agent manages each one's rhythm independently.
-  </Accordion>
-</AccordionGroup>
+Use `telegram` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/api-reference/channel-settings).

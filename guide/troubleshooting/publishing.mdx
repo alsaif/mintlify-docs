@@ -1,0 +1,31 @@
+---
+title: "A post did not publish"
+description: "Reading the failure, and what to do about it."
+---
+
+Open the post. A failed post keeps the platform's own error message, which is
+usually more specific than anything Nushir could add.
+
+## Common causes
+
+**Token expired.** The channel shows as needing reconnection. Reconnect, then
+reschedule — reconnecting does not retry the failed post.
+
+**Rejected content.** The platform refused the media or the text: wrong aspect
+ratio, unsupported codec, a link the platform blocks.
+
+**Rate limited.** Platforms cap how much an app can post. Space posts out rather
+than scheduling many to one channel at once.
+
+**Duplicate content.** Several platforms silently reject text identical to
+something posted recently. Vary the wording.
+
+## One channel failed, the others worked
+
+Expected. Channels publish independently — a failure on one does not hold back
+the group.
+
+## Nothing published at all
+
+Check the post is in **queue** and not **draft**. Drafts never publish, and
+because they skip validation they are easy to leave incomplete by accident.

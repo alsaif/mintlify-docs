@@ -1,68 +1,26 @@
 ---
-title: "Schedule Bluesky Posts with the Nushir AI Agent"
-sidebarTitle: "Bluesky"
-description: "Connect Bluesky once and let Nushir plan your cadence, write within 300 characters, attach up to 4 images with link cards, and track results to improve each month."
+title: "Bluesky"
+description: "Connecting Bluesky, and the rules it enforces."
 ---
 
-Bluesky's decentralised, open-protocol design attracts an audience that values authenticity and direct engagement — which means generic, high-volume posting is even less effective here than on other networks. Nushir's AI agent crafts Bluesky posts that fit the platform's 300-character limit with precision, attaches up to four images, and adds rich link cards where relevant. Connect your account once, set your voice, and drafts start appearing in your calendar ready for your approval.
-
-## Platform Specs
-
-| Property | Detail |
+| | |
 |---|---|
-| **Content types** | Posts, Images |
-| **Text limit** | 300 characters |
-| **Media** | Up to 4 images |
-| **Links** | Rich link cards with title, description, and thumbnail |
+| API identifier | `bluesky` |
+| Account required | Any account. |
+| Media | Optional. |
+| Multi-part posts | Native thread. |
+| Analytics | None. |
 
-## What the Agent Does
+## Connecting
 
-<Steps>
-  <Step title="Plans your posting rhythm">
-    The agent calibrates a Bluesky posting frequency that keeps you visible without over-posting. It distributes topics evenly across the month and avoids repeating the same framing back-to-back, so your feed reads as a genuine stream of thought rather than a broadcast queue.
-  </Step>
-  <Step title="Writes within 300 characters in your tone">
-    Three hundred characters demands clarity. The agent strips every post down to its sharpest form — no filler, no padding — and writes in your voice in Arabic or English. Your content restrictions and any brand language preferences are applied to every draft automatically.
-  </Step>
-  <Step title="Prepares images and link cards">
-    The agent attaches up to 4 images per post from your media library, generating on-brand alternatives when the library doesn't have the right asset. For posts that include a URL, it fetches a link card — title, description, and preview image — so the post renders richly in every Bluesky client.
-  </Step>
-  <Step title="Reads results to improve the next month">
-    After publishing, the agent reads your Bluesky engagement metrics — likes, reposts, replies, and reach — and uses those signals to adjust the timing, topic mix, and format choices for the following month's plan.
-  </Step>
-</Steps>
+**Add Channel → Bluesky**, approve access on the platform, and you are returned
+here. See [connect a channel](/guide/channels/connect) for the general flow.
 
-## How to Connect Bluesky
+## Worth knowing
 
-<Steps>
-  <Step title="Add the channel">
-    In your Nushir dashboard, click **Add Channel** and select **Bluesky**.
-  </Step>
-  <Step title="Authenticate with your Bluesky account">
-    Enter your Bluesky handle (e.g. `yourname.bsky.social`) and an App Password generated from your Bluesky account settings. Nushir stores only the App Password, not your main account password.
-  </Step>
-  <Step title="Set your tone and restrictions">
-    Choose your language, describe your brand voice, and list any content restrictions. These settings apply to every Bluesky draft the agent generates.
-  </Step>
-  <Step title="Review drafts in your calendar">
-    Your first Bluesky drafts appear in the content calendar. Edit any post, adjust the scheduled time, or approve it as-is. The post goes live at the time you set.
-  </Step>
-</Steps>
+Uses an app password rather than OAuth. Generate one in Bluesky settings; your account password will not work.
 
-<Note>
-  You can disconnect Bluesky at any time from **Channel Settings** in Nushir. Because Nushir uses an App Password rather than your main credentials, you can also revoke access directly from the Passwords section of your Bluesky account settings without changing your main password.
-</Note>
+## Posting over the API
 
-## Frequently Asked Questions
-
-<AccordionGroup>
-  <Accordion title="Does the agent post to Bluesky without my approval?">
-    No. Every draft is placed in your calendar with a **Pending** status. Auto-publish is an opt-in setting you can enable per channel — it is never on by default.
-  </Accordion>
-  <Accordion title="Does each Bluesky account count as one channel slot?">
-    Yes. Each connected Bluesky account uses one channel slot from your plan. See the [pricing page](https://nushir.com/pricing.html) for the number of slots your plan includes.
-  </Accordion>
-  <Accordion title="Can I publish to Bluesky via the API or MCP?">
-    Yes. REST API and MCP publishing are supported on Bluesky, just like every other Nushir channel. See the [API & MCP documentation](/channels/overview#custom-channel) for setup details.
-  </Accordion>
-</AccordionGroup>
+Use `bluesky` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/api-reference/channel-settings).
