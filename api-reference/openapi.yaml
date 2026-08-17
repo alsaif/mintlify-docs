@@ -708,7 +708,7 @@ paths:
               additionalProperties: true
       responses:
         '200': { description: The generation job. }
-        '403': { description: Not enabled, or no credits remaining. }
+        '403': { description: "Not enabled, or no credits remaining." }
 
   /video/function:
     post:
