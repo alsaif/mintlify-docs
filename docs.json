@@ -318,6 +318,94 @@
   },
   "redirects": [
     {
+      "source": "/public-api/integrations/list-channels",
+      "destination": "/public-api/integrations/list"
+    },
+    {
+      "source": "/public-api/integrations/disconnect-a-channel",
+      "destination": "/public-api/integrations/delete"
+    },
+    {
+      "source": "/public-api/integrations/get-a-channels-settings",
+      "destination": "/public-api/integrations/settings"
+    },
+    {
+      "source": "/public-api/integrations/check-for-any-working-channel",
+      "destination": "/public-api/integrations/is-connected"
+    },
+    {
+      "source": "/public-api/integrations/list-client-groups",
+      "destination": "/public-api/integrations/groups"
+    },
+    {
+      "source": "/public-api/integrations/begin-connecting-a-channel",
+      "destination": "/public-api/integrations/connect"
+    },
+    {
+      "source": "/public-api/posts/find-the-next-free-slot",
+      "destination": "/public-api/integrations/find-slot"
+    },
+    {
+      "source": "/public-api/posts/list-posts",
+      "destination": "/public-api/posts/list"
+    },
+    {
+      "source": "/public-api/posts/create-a-post",
+      "destination": "/public-api/posts/create"
+    },
+    {
+      "source": "/public-api/posts/delete-a-post",
+      "destination": "/public-api/posts/delete"
+    },
+    {
+      "source": "/public-api/posts/delete-a-post-group",
+      "destination": "/public-api/posts/delete-by-group"
+    },
+    {
+      "source": "/public-api/posts/what-is-stopping-this-post",
+      "destination": "/public-api/posts/missing-content"
+    },
+    {
+      "source": "/public-api/posts/update-per-channel-settings",
+      "destination": "/public-api/posts/settings"
+    },
+    {
+      "source": "/public-api/posts/change-post-status",
+      "destination": "/public-api/posts/change-status"
+    },
+    {
+      "source": "/public-api/posts/record-the-published-url",
+      "destination": "/public-api/posts/update-release-id"
+    },
+    {
+      "source": "/public-api/uploads/upload-a-file",
+      "destination": "/public-api/uploads/upload-file"
+    },
+    {
+      "source": "/public-api/uploads/upload-from-a-url",
+      "destination": "/public-api/uploads/upload-from-url"
+    },
+    {
+      "source": "/public-api/analytics/channel-analytics",
+      "destination": "/public-api/analytics/platform"
+    },
+    {
+      "source": "/public-api/analytics/post-analytics",
+      "destination": "/public-api/analytics/post"
+    },
+    {
+      "source": "/public-api/notifications/list-notifications",
+      "destination": "/public-api/notifications/list"
+    },
+    {
+      "source": "/public-api/video/generate-a-video",
+      "destination": "/public-api/video/generate"
+    },
+    {
+      "source": "/public-api/video/call-a-video-provider-function",
+      "destination": "/public-api/video/function"
+    },
+    {
       "source": "/index",
       "destination": "/general/introduction"
     },
