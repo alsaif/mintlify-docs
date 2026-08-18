@@ -1,0 +1,108 @@
+---
+title: "إعدادات القنوات"
+description: "الكائن الخاص بكل منصة الذي يتطلبه POST /posts."
+---
+
+يمكن أن يحمل كل عنصر في `posts` كائن `settings`. ويعتمد ما ينتمي إليه على
+`identifier` الخاص بالقناة، وهو **مطلوب** لعدة منصات — إغفاله يجعل الاستدعاء
+يُرجع `400`.
+
+<Note>
+يُتجاهل `settings` عندما تكون `"type": "draft"`. وهذه هي الطريقة المقصودة
+لبناء منشور على مراحل قبل أن تعرف كل الحقول.
+</Note>
+
+## من أين تأتي البنية
+
+إعدادات كل منصة يحددها مزوّدها داخل التطبيق، ولذلك تتبع هذه القائمة ما سيقبله
+الخادم فعليًا. وعندما تغيّر منصة ما واجهة API الخاصة بها، تتغير الحقول
+المقبولة معها.
+
+## المنصات الشائعة
+
+<AccordionGroup>
+  <Accordion title="tiktok">
+    ```json
+    {
+      "__type": "tiktok",
+      "privacy_level": "PUBLIC_TO_EVERYONE",
+      "content_posting_method": "DIRECT_POST",
+      "disable_comment": false,
+      "disable_duet": false,
+      "disable_stitch": false,
+      "brand_content_toggle": false,
+      "brand_organic_toggle": false
+    }
+    ```
+
+    `content_posting_method` هو الحقل المهم هنا. `DIRECT_POST` ينشر إلى الملف
+    الشخصي. أما `UPLOAD` فيرسل المنشور إلى صندوق الوارد في TikTok لدى صانع
+    المحتوى كمسودة عليه إكمالها خلال 24 ساعة — وفي هذا الوضع **يُتجاهل كل
+    إعداد آخر هنا بصمت**، بما في ذلك مستوى الخصوصية.
+  </Accordion>
+
+  <Accordion title="reddit">
+    ```json
+    {
+      "__type": "reddit",
+      "subreddit": [{ "value": { "name": "r/example", "title": "Post title" } }]
+    }
+    ```
+
+    تحديد subreddit مطلوب. ولكل subreddit قواعد نشر خاصة به، والمنشور الذي
+    تقبله واجهة API قد يُزال مع ذلك من قِبل مشرفي ذلك الـ subreddit.
+  </Accordion>
+
+  <Accordion title="youtube">
+    ```json
+    {
+      "__type": "youtube",
+      "title": "Video title",
+      "type": "public",
+      "thumbnail": { "id": "med_01H9" }
+    }
+    ```
+
+    العنوان مطلوب — فليس لدى YouTube مفهوم لرفع بلا عنوان.
+  </Accordion>
+
+  <Accordion title="instagram">
+    ```json
+    { "__type": "instagram", "post_type": "post", "collaborators": [] }
+    ```
+
+    يمكن أن تكون قيمة `post_type` هي `post` أو `reel` أو `story`. والوسائط
+    مطلوبة في جميع الأحوال؛ فـ Instagram لا يقبل منشورًا نصيًا فقط.
+  </Accordion>
+
+  <Accordion title="pinterest">
+    ```json
+    {
+      "__type": "pinterest",
+      "board": "BOARD_ID",
+      "title": "Pin title",
+      "link": "https://example.com"
+    }
+    ```
+
+    تحديد اللوحة (board) مطلوب.
+  </Accordion>
+
+  <Accordion title="x, mastodon, bluesky, threads">
+    ```json
+    { "__type": "x" }
+    ```
+
+    لا توجد حقول مطلوبة. تتحول المنشورات متعددة الأجزاء إلى سلاسل أصلية على
+    هذه المنصات — راجع [السلاسل](/ar/general/composer/threads-and-comments).
+  </Accordion>
+</AccordionGroup>
+
+## معرفة البنية لأي منصة
+
+طريقتان موثوقتان بدلًا من التخمين:
+
+1. جهِّز منشورًا واحدًا من ذلك النوع في المحرِّر، ثم اقرأه عبر `GET /posts`
+   وانسخ بنية `settings`.
+2. يُرجع `GET /integration-settings/{id}` الإعدادات الافتراضية المخزَّنة
+   للقناة.
