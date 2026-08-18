@@ -32,6 +32,17 @@ info:
 
     A missing or unrecognised credential returns `401`.
 
+    ## Rate limits
+
+    **90 requests per hour** per organisation, counted across every endpoint.
+    Crossing the limit returns `429`; the window is one hour from each request.
+
+    ## Try it from these pages
+
+    Every endpoint page has a runnable panel. Paste your API key into the
+    `Authorization` field, fill the parameters, and send - the request runs
+    against your real organisation, so anything you create or delete is real.
+
     ## Channel or integration?
 
     The interface says **channel**. The API says **integration**. They are the

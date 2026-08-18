@@ -28,6 +28,24 @@ The interface says **channel**. The API says **integration**. Same object — th
 naming was never reconciled. This reference uses *integration* because that is
 what the routes are called.
 
+## Rate limits
+
+**90 requests per hour** per organisation, across every endpoint together.
+Crossing it returns `429`. Batch reads where you can - one bounded
+`GET /posts` beats polling per post.
+
+## Testing without writing code
+
+Every endpoint page in this reference carries a runnable panel: paste your API
+key from *Settings → Developers* into the **Authorization** field, fill the
+parameters, and press **Send**.
+
+<Warning>
+The panel talks to your live organisation - a `POST /posts` from the docs
+creates a real post, and a delete really deletes. Test destructive calls
+against a draft, not a published campaign.
+</Warning>
+
 ## Dates
 
 ISO-8601, always **UTC**. A post scheduled for `2026-09-01T09:00:00Z` publishes

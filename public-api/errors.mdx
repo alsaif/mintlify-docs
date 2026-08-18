@@ -9,6 +9,7 @@ description: "What each status means, and what it usually is."
 | `401` | Not authenticated | Missing header, or a `Bearer ` prefix that should not be there |
 | `403` | Not permitted | Plan limit reached |
 | `404` | Not found | Wrong id — or an id belonging to another organisation |
+| `429` | Rate limited | Over 90 requests in the hour — wait and retry |
 
 ## Shape
 
