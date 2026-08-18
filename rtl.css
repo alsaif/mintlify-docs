@@ -1,0 +1,31 @@
+/* RTL for the Arabic edition.
+ *
+ * Mintlify sets <html lang="ar"> on Arabic-language pages but never adds
+ * dir="rtl", so the layout chrome stays left-to-right around right-to-left
+ * text. Flipping direction on the root flips the flex/grid layout - sidebar,
+ * table of contents, navbar and scrollbar all move to their RTL positions.
+ *
+ * Code stays LTR on purpose: API paths, JSON, shell commands and key inputs
+ * are Latin text, and bidi-reordering them produces garbage. unicode-bidi
+ * isolate keeps each embedded LTR run intact inside RTL paragraphs.
+ */
+html[lang="ar"] {
+  direction: rtl;
+}
+
+html[lang="ar"] pre,
+html[lang="ar"] code,
+html[lang="ar"] kbd,
+html[lang="ar"] samp {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+/* The API playground and its request/response panes are English-only
+ * machinery; keep every field readable as typed. */
+html[lang="ar"] [role="dialog"] input,
+html[lang="ar"] [role="dialog"] textarea {
+  direction: ltr;
+  text-align: left;
+}
