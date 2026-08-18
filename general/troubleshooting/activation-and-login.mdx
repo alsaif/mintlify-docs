@@ -1,0 +1,28 @@
+---
+title: "Activation and login"
+description: "Sign-in problems, and the errors behind them."
+---
+
+## Wrong password — or is it?
+
+A failed sign-in with the right password usually means the account was created
+with a different method. An account registered through Google sign-in has no
+password to type; use the same button you registered with.
+
+## Activation links
+
+Where email confirmation is enabled, the activation link is single-use and
+expires. An expired link fails quietly — request a fresh one from the sign-in
+page rather than retrying the old email.
+
+## Sessions
+
+Signing in issues a session cookie scoped to `platform.nushir.com`. Browser
+extensions that strip cookies, and privacy modes that block them, produce the
+classic symptom: a successful sign-in that immediately bounces back to the
+login page. Allow cookies for the domain and sign in again.
+
+## Password resets
+
+**Forgot?** on the sign-in page sends a reset link. Resetting invalidates
+existing sessions on other devices.

@@ -1,0 +1,32 @@
+---
+title: "Troubleshooting"
+description: "Start here when something misbehaves."
+---
+
+The three problem families, in the order they usually occur:
+
+<CardGroup cols={1}>
+  <Card title="Connecting a channel fails" href="/general/troubleshooting/oauth-connect">
+    Errors during the platform approval flow, and channels that immediately
+    demand reconnection.
+  </Card>
+  <Card title="A post did not publish" href="/general/troubleshooting/publishing">
+    Reading the error state, and the platform rejections behind it.
+  </Card>
+  <Card title="Uploads and media" href="/general/troubleshooting/uploads">
+    Files that will not upload, and video the platform refuses after upload.
+  </Card>
+</CardGroup>
+
+## The two facts that resolve most tickets
+
+**Account types gate publishing.** Instagram requires Business or Creator;
+Facebook requires a Page; several platforms restrict by account kind. A channel
+that connects but cannot publish is almost always this — see
+[platform reference](/general/platforms/overview).
+
+**Tokens expire by design.** Platforms cut tokens on a schedule, and
+immediately when you change your password there. Reconnecting from the channel
+menu is routine maintenance, not a fault.
+
+Still stuck? See [support](/general/support).

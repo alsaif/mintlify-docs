@@ -1,0 +1,26 @@
+---
+title: "Slack"
+description: "Connecting Slack, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `slack` |
+| Account required | The app must be installed in the workspace. |
+| Media | Optional. |
+| Multi-part posts | Threaded replies. |
+| Analytics | None. |
+
+## Connecting
+
+**Add Channel → Slack**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+Internal distribution rather than public publishing — useful for notifying a team when something goes out.
+
+## Posting over the API
+
+Use `slack` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

@@ -1,0 +1,32 @@
+---
+title: "Google My Business"
+description: "The `settings` object for `gmb` channels on POST /posts."
+---
+
+Channels whose `identifier` is `gmb` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"gmb"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `topicType` | enum | optional | Accepted: `STANDARD`, `EVENT`, `OFFER`. |
+| `callToActionType` | enum | optional | Accepted: `NONE`, `BOOK`, `ORDER`, `SHOP`, `LEARN_MORE`, `SIGN_UP`, `GET_OFFER`, `CALL`. |
+| `callToActionUrl` | string (URL) | optional |  |
+| `eventTitle` | string | optional |  |
+| `eventStartDate` | string | optional |  |
+| `eventEndDate` | string | optional |  |
+| `eventStartTime` | string | optional |  |
+| `eventEndTime` | string | optional |  |
+| `offerCouponCode` | string | optional |  |
+| `offerRedeemUrl` | string (URL) | optional |  |
+| `offerTerms` | string | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

@@ -1,0 +1,32 @@
+---
+title: "Instagram"
+description: "The `settings` object for `instagram` channels on POST /posts."
+---
+
+Channels whose `identifier` is `instagram` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"instagram"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `label` | string | **required** |  |
+| `id` | string | **required** |  |
+| `title` | string | optional |  |
+| `artist` | string | optional |  |
+| `image` | string | optional |  |
+| `audio_volume` | number | optional |  |
+| `video_volume` | enum | optional | Accepted: `post`, `story`. |
+| `is_trial_reel` | object | optional |  |
+| `graduation_strategy` | enum | optional | Accepted: `MANUAL`, `SS_PERFORMANCE`. |
+| `collaborators` | array | optional |  |
+| `audio` | object | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

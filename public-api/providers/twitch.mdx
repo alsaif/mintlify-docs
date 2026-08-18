@@ -1,0 +1,23 @@
+---
+title: "Twitch"
+description: "The `settings` object for `twitch` channels on POST /posts."
+---
+
+Channels whose `identifier` is `twitch` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"twitch"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `messageType` | enum | optional | Accepted: `message`, `announcement`. |
+| `announcementColor` | enum | optional | Accepted: `primary`, `blue`, `green`, `orange`, `purple`. |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

@@ -1,0 +1,22 @@
+---
+title: "Warpcast (Farcaster)"
+description: "The `settings` object for `wrapcast` channels on POST /posts."
+---
+
+Channels whose `identifier` is `wrapcast` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"wrapcast"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

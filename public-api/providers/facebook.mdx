@@ -1,0 +1,24 @@
+---
+title: "Facebook Page"
+description: "The `settings` object for `facebook` channels on POST /posts."
+---
+
+Channels whose `identifier` is `facebook` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"facebook"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `url` | string (URL) | optional |  |
+| `post_type` | enum | optional | Accepted: `post`, `story`. |
+| `text_format_preset_id` | string | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

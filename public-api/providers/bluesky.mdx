@@ -1,0 +1,11 @@
+---
+title: "Bluesky"
+description: "Posting to `bluesky` channels - no settings object required."
+---
+
+Channels whose `identifier` is `bluesky` need no `settings` object: content and
+media are the whole payload. Include the channel in `posts` and omit
+`settings`, or send an empty object with `__type` set to `"bluesky"`.
+
+Platform behaviour - media rules, thread handling, account requirements - is
+covered in the [platform reference](/general/platforms/overview).

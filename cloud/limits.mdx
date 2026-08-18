@@ -1,0 +1,29 @@
+---
+title: "Limits"
+description: "How plan limits are counted, and what happens at the edge."
+---
+
+Three kinds of limit, counted differently.
+
+## Channels
+
+Counted as **connected**, including disabled ones. At the limit, connecting
+another is blocked until one is deleted — disabling is not enough, because a
+disabled channel keeps its connection.
+
+## Monthly allowances
+
+Images and videos generated per month reset on the **billing date**, not the
+calendar month. Exhausting an allowance blocks new generation of that type;
+everything already scheduled still publishes.
+
+## Team seats
+
+Counted as invited members, including pending invitations. Removing a member
+frees the seat immediately.
+
+## Where you stand
+
+Billing settings shows current usage against each limit. The API returns `403`
+with a named limit when a call would cross one — see
+[errors](/public-api/errors).

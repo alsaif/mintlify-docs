@@ -1,0 +1,29 @@
+---
+title: "Hashnode"
+description: "The `settings` object for `hashnode` channels on POST /posts."
+---
+
+Channels whose `identifier` is `hashnode` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"hashnode"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `value` | string | **required** |  |
+| `label` | string | **required** |  |
+| `title` | string | **required** |  |
+| `subtitle` | string | optional |  |
+| `main_image` | object | optional |  |
+| `canonical` | string | optional |  |
+| `publication` | string | optional |  |
+| `tags` | array | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

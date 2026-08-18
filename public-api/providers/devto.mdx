@@ -1,0 +1,26 @@
+---
+title: "Dev.to"
+description: "The `settings` object for `devto` channels on POST /posts."
+---
+
+Channels whose `identifier` is `devto` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"devto"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `title` | string | **required** |  |
+| `main_image` | object | optional |  |
+| `canonical` | string | optional |  |
+| `organization` | string | optional |  |
+| `tags` | array | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

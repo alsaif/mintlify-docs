@@ -1,0 +1,26 @@
+---
+title: "YouTube"
+description: "Connecting YouTube, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `youtube` |
+| Account required | A channel on the account. |
+| Media | **Required** — video. |
+| Multi-part posts | Follow-up comments. |
+| Analytics | Account and post metrics. |
+
+## Connecting
+
+**Add Channel → YouTube**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+A `title` is required. Quota is per project and generous for scheduling but not unlimited.
+
+## Posting over the API
+
+Use `youtube` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

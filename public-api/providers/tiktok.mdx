@@ -1,0 +1,31 @@
+---
+title: "TikTok"
+description: "The `settings` object for `tiktok` channels on POST /posts."
+---
+
+Channels whose `identifier` is `tiktok` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"tiktok"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `title` | object | optional | Used as the title of the post. The only setting TikTok keeps when content_posting_method=UPLOAD. |
+| `privacy_level` | enum | **required** | Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD. Accepted: `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`, `SELF_ONLY`. |
+| `duet` | boolean | **required** | Video posts only, and only when content_posting_method=DIRECT_POST. TikTok has no duet setting for photo posts. |
+| `stitch` | boolean | **required** | Video posts only, and only when content_posting_method=DIRECT_POST. TikTok has no stitch setting for photo posts. |
+| `comment` | boolean | **required** | Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD. |
+| `autoAddMusic` | enum | **required** | Photo posts only, and only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD. Accepted: `yes`, `no`. |
+| `brand_content_toggle` | boolean | **required** | Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD. |
+| `video_made_with_ai` | boolean | optional | Labels the post as AI generated. Video posts only, and only when content_posting_method=DIRECT_POST. TikTok has no AI-generated label for photo posts, and discards it on UPLOAD. |
+| `brand_organic_toggle` | boolean | **required** | Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD. |
+| `content_posting_method` | enum | **required** | Required. Use "DIRECT_POST" to actually publish the post to TikTok. Accepted: `DIRECT_POST`, `UPLOAD`. |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

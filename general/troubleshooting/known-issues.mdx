@@ -1,0 +1,27 @@
+---
+title: "Known issues"
+description: "Current limitations worth knowing before you hit them."
+---
+
+An honest list, maintained as things change.
+
+## Platform-side constraints
+
+- **TikTok posts may be creator-only until the app's API audit completes.**
+  The API reports success and the post exists, but only its creator can see
+  it. A TikTok review requirement, not a bug.
+- **Instagram Stories cannot carry all composer features** — Stories accept
+  media plus limited options, by Instagram's design.
+- **Reddit moderation is invisible to the API.** A post can be published
+  successfully and removed by subreddit moderators moments later; Nushir still
+  shows it as published because, from the API's view, it was.
+
+## Product limitations
+
+- **Analytics backfill is shallow** — metrics collection starts when a channel
+  is connected; history from before then is not imported.
+- **Moving a published post edits the record, not the platform** — see
+  [moving posts](/general/calendar/moving-posts).
+
+Found something that belongs here? Tell [support](/general/support) — the list
+only stays honest if it is maintained.

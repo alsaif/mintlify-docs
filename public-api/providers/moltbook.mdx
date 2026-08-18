@@ -1,0 +1,22 @@
+---
+title: "Moltbook"
+description: "The `settings` object for `moltbook` channels on POST /posts."
+---
+
+Channels whose `identifier` is `moltbook` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"moltbook"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `submolt` | string | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

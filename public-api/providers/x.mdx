@@ -1,0 +1,29 @@
+---
+title: "X"
+description: "The `settings` object for `x` channels on POST /posts."
+---
+
+Channels whose `identifier` is `x` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"x"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `community` | object | optional |  |
+| `who_can_reply_post` | enum | optional | Accepted: `everyone`, `following`, `mentionedUsers`, `subscribers`, `verified`. |
+| `post_type` | enum | optional | post = a regular short post (plain text). article = a long-form X article: write the post content as HTML (p, h1, h2, h3, ul, ol, li, strong, u, a) - the formatting is kept in the article Accepted: `post`, `article`. |
+| `article_title` | string | optional | The title of the article, required when post_type is article |
+| `article_status` | enum | optional | draft = save the article as a draft on X, published = publish it right away, required when post_type is article Accepted: `draft`, `published`. |
+| `article_cover` | object | optional | Optional cover image for the article, only used when post_type is article |
+| `made_with_ai` | boolean | optional |  |
+| `paid_partnership` | boolean | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

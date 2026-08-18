@@ -1,0 +1,26 @@
+---
+title: "Bluesky"
+description: "Connecting Bluesky, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `bluesky` |
+| Account required | Any account. |
+| Media | Optional. |
+| Multi-part posts | Native thread. |
+| Analytics | None. |
+
+## Connecting
+
+**Add Channel → Bluesky**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+Uses an app password rather than OAuth. Generate one in Bluesky settings; your account password will not work.
+
+## Posting over the API
+
+Use `bluesky` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

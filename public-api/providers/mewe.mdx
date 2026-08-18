@@ -1,0 +1,23 @@
+---
+title: "MeWe"
+description: "The `settings` object for `mewe` channels on POST /posts."
+---
+
+Channels whose `identifier` is `mewe` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"mewe"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `postType` | enum | **required** | Where to post: timeline or group Accepted: `timeline`, `group`. |
+| `group` | string | optional | Group must be an id |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

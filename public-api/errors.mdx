@@ -1,0 +1,41 @@
+---
+title: "Errors"
+description: "What each status means, and what it usually is."
+---
+
+| Status | Meaning | Usually |
+|---|---|---|
+| `400` | Validation failed | A missing `settings` field, or a date that is not ISO-8601 |
+| `401` | Not authenticated | Missing header, or a `Bearer ` prefix that should not be there |
+| `403` | Not permitted | Plan limit reached |
+| `404` | Not found | Wrong id — or an id belonging to another organisation |
+
+## Shape
+
+```json
+{
+  "statusCode": 400,
+  "message": ["settings.privacy_level should not be empty"],
+  "error": "Bad Request"
+}
+```
+
+`message` is a string for single errors and an array when several fields failed.
+Handle both.
+
+## Why a wrong id gives 404, not 403
+
+An object that exists but belongs to another organisation returns `404`, the
+same as one that does not exist at all. That is deliberate: the API never
+confirms that someone else's id is real.
+
+## Validation is the one to plan for
+
+Most integration failures are `400` from `POST /posts`, and nearly always a
+platform that needs `settings` the caller did not send. Two ways to avoid
+discovering that in production:
+
+1. Create as `draft` — validation is skipped — then call
+   `GET /posts/{id}/missing` to be told exactly what is outstanding.
+2. Read [channel settings](/public-api/channel-settings) for the platforms
+   you support.

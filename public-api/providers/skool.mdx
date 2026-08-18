@@ -1,0 +1,24 @@
+---
+title: "Skool"
+description: "The `settings` object for `skool` channels on POST /posts."
+---
+
+Channels whose `identifier` is `skool` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"skool"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `group` | string | **required** | Group must be an id |
+| `label` | string | **required** | Label must be an id |
+| `title` | string | **required** | Title of the post |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

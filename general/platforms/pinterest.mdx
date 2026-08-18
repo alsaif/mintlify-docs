@@ -1,0 +1,26 @@
+---
+title: "Pinterest"
+description: "Connecting Pinterest, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `pinterest` |
+| Account required | Business account. |
+| Media | **Required** — image or video. |
+| Multi-part posts | Not supported. |
+| Analytics | Account and post metrics. |
+
+## Connecting
+
+**Add Channel → Pinterest**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+A `board` is required. Pins without a destination link perform poorly but are accepted.
+
+## Posting over the API
+
+Use `pinterest` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

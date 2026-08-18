@@ -1,0 +1,24 @@
+---
+title: "Whop"
+description: "The `settings` object for `whop` channels on POST /posts."
+---
+
+Channels whose `identifier` is `whop` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"whop"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `company` | string | **required** | Company ID |
+| `experience` | string | **required** | Experience ID for the Whop forum |
+| `title` | string | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

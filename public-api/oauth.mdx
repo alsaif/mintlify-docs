@@ -1,0 +1,32 @@
+---
+title: "OAuth apps"
+description: "Let other people connect their Nushir account to your product."
+---
+
+An API key acts as *your* organisation. An **OAuth app** is for the other
+direction: your product's users grant it access to *their* Nushir account.
+
+## The flow
+
+1. Create the OAuth app in *Settings → Developers*.
+2. Send the user to the authorisation URL; they approve on Nushir's side.
+3. Your app receives a token with a `pos_` prefix.
+4. Send it on the `Authorization` header — raw, no `Bearer` — exactly like an
+   API key. The server resolves it to the granting organisation.
+
+```bash
+curl https://platform.nushir.com/api/public/v1/integrations \
+  -H "Authorization: pos_xxxxxxxxxxxx"
+```
+
+## Scope
+
+A `pos_` token has the same reach into the granting organisation as an API key
+has into yours: the whole surface. Ask users for access only when your product
+genuinely needs it, and expect it to be revoked at any time.
+
+## Revocation
+
+Users revoke a grant from their own developer settings; revoked tokens fail
+with `401` immediately. Handle that as a normal state, not an error — prompt
+the user to reconnect.

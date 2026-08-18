@@ -1,0 +1,26 @@
+---
+title: "TikTok"
+description: "Connecting TikTok, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `tiktok` |
+| Account required | Any account. Publishing needs the app approved for the Content Posting API. |
+| Media | **Required** — video or images. |
+| Multi-part posts | Follow-up comments. |
+| Analytics | Account and post metrics. |
+
+## Connecting
+
+**Add Channel → TikTok**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+`content_posting_method` decides everything: `DIRECT_POST` publishes; `UPLOAD` sends a draft to the creator's inbox and silently discards every other setting. Until the API audit passes, posts may be restricted to creator-only visibility.
+
+## Posting over the API
+
+Use `tiktok` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

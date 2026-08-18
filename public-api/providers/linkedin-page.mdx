@@ -1,0 +1,23 @@
+---
+title: "LinkedIn Page"
+description: "The `settings` object for `linkedin-page` channels on POST /posts."
+---
+
+Channels whose `identifier` is `linkedin-page` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"linkedin-page"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `post_as_images_carousel` | boolean | optional |  |
+| `carousel_name` | string | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

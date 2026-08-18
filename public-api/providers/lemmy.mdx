@@ -1,0 +1,26 @@
+---
+title: "Lemmy"
+description: "The `settings` object for `lemmy` channels on POST /posts."
+---
+
+Channels whose `identifier` is `lemmy` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"lemmy"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `subreddit` | string | **required** |  |
+| `id` | string | **required** |  |
+| `title` | string | **required** |  |
+| `url` | string (URL) | optional |  |
+| `value` | object | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

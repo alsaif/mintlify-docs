@@ -1,0 +1,39 @@
+---
+title: "Writing the post"
+description: "The editor, formatting, mentions and character counts."
+---
+
+The editor is a rich-text field, but what survives to each platform is decided
+by that platform — most accept plain text plus line breaks and little else.
+
+## Formatting
+
+Bold, italic and lists render on platforms that support them and are stripped
+on those that do not. Nushir sanitises rather than rejects: unsupported markup
+is removed at publish, so what you see in the editor is the richest version,
+not a guarantee.
+
+Line breaks are preserved everywhere. They are the one piece of formatting you
+can rely on across every channel.
+
+## Character counts
+
+Every selected channel shows its own remaining count, because limits differ
+per platform — and per instance, on Mastodon. When several channels share the
+global draft, the *lowest* limit is the one that blocks scheduling.
+
+## Mentions and hashtags
+
+Typed as text. A platform that resolves `@handle` or `#tag` does so on its own
+side — Nushir does not verify a mention exists before publishing.
+
+## Emoji
+
+The emoji picker inserts standard Unicode, which every platform renders in its
+own style.
+
+<Tip>
+Writing per-platform variants of the same message? Detach only the channels
+that need it and keep the rest on the shared draft — see
+[global vs per-channel](/general/composer/global-vs-per-channel).
+</Tip>

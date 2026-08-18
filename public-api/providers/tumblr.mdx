@@ -1,0 +1,25 @@
+---
+title: "Tumblr"
+description: "The `settings` object for `tumblr` channels on POST /posts."
+---
+
+Channels whose `identifier` is `tumblr` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"tumblr"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `title` | string | optional |  |
+| `link` | string | optional |  |
+| `sourceUrl` | string | optional |  |
+| `tags` | string | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

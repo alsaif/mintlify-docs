@@ -1,0 +1,55 @@
+---
+title: "Images and video"
+description: "Adding media, and the limits that actually bite."
+---
+
+Attach from the composer, or reuse anything already in the
+[media library](/general/media-library).
+
+## Requirements differ per platform
+
+The composer enforces each platform's rules before it lets you schedule, which
+is why a post that is fine on X may be blocked on Instagram.
+
+The two that catch people most often:
+
+- **Some platforms will not accept a text-only post.** Instagram and TikTok both
+  require media.
+- **Aspect ratio and duration are enforced by the platform**, not by Nushir. A
+  video the composer accepts can still be rejected on publish if it falls
+  outside what the platform allows.
+
+See [platform reference](/general/platforms/overview) for the per-platform table.
+
+## Uploading over the API
+
+Two routes, depending on where the file is.
+
+Local file:
+
+```bash
+curl -X POST https://platform.nushir.com/api/public/v1/upload \
+  -H "Authorization: $NUSHIR_API_KEY" \
+  -F "file=@video.mp4"
+```
+
+Already at a public URL — the server fetches it directly, so a large video never
+travels through your process:
+
+```bash
+curl -X POST https://platform.nushir.com/api/public/v1/upload-from-url \
+  -H "Authorization: $NUSHIR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/video.mp4"}'
+```
+
+Both return a media item. Reference its `id` from the post:
+
+```json
+{ "content": "Launch day.", "image": [{ "id": "med_01H9" }] }
+```
+
+<Note>
+`upload-from-url` sends no credentials with its fetch, so the URL has to be
+publicly reachable. A signed URL works; a private bucket path does not.
+</Note>

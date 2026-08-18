@@ -1,0 +1,28 @@
+---
+title: "YouTube"
+description: "The `settings` object for `youtube` channels on POST /posts."
+---
+
+Channels whose `identifier` is `youtube` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"youtube"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `value` | string | **required** |  |
+| `label` | string | **required** |  |
+| `title` | string | **required** |  |
+| `type` | enum | **required** | Accepted: `public`, `private`, `unlisted`. |
+| `selfDeclaredMadeForKids` | enum | optional | Accepted: `yes`, `no`. |
+| `thumbnail` | object | optional |  |
+| `tags` | array | optional |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

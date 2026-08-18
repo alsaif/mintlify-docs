@@ -1,0 +1,30 @@
+---
+title: "Reddit"
+description: "The `settings` object for `reddit` channels on POST /posts."
+---
+
+Channels whose `identifier` is `reddit` validate the `settings` object below.
+This page is generated from the application's own validation layer, so it
+matches exactly what the server accepts.
+
+Set `settings.__type` to `"reddit"`.
+
+## Fields
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `id` | string | **required** |  |
+| `name` | string | **required** |  |
+| `subreddit` | string | **required** | Subreddit must start with /r |
+| `title` | string | **required** |  |
+| `type` | string | **required** | Must be any of link, self (normal post), image, video, videogif |
+| `url` | string (URL) | optional |  |
+| `is_flair_required` | boolean | **required** |  |
+| `flair` | object | optional |  |
+| `value` | object | **required** |  |
+
+<Note>
+Settings are validated when a post is scheduled or published. Drafts skip this
+validation entirely - see [errors](/public-api/errors) for how failures are
+reported.
+</Note>

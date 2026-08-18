@@ -1,0 +1,26 @@
+---
+title: "Instagram"
+description: "Connecting Instagram, and the rules it enforces."
+---
+
+| | |
+|---|---|
+| API identifier | `instagram` |
+| Account required | **Business or Creator**, linked to a Facebook Page. |
+| Media | **Required** — no text-only posts. |
+| Multi-part posts | Follow-up comments. |
+| Analytics | Account and post metrics. |
+
+## Connecting
+
+**Add Channel → Instagram**, approve access on the platform, and you are returned
+here. See [connect a channel](/general/channels/connect) for the general flow.
+
+## Worth knowing
+
+`post_type` selects post, reel or story. A personal account can connect but never publish; switch it in the Instagram app first.
+
+## Posting over the API
+
+Use `instagram` as the channel's `identifier`. The `settings` object this platform
+expects is listed in [channel settings](/public-api/channel-settings).

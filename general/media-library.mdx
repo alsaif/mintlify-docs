@@ -1,0 +1,23 @@
+---
+title: "Media library"
+description: "Everything you have uploaded, in one place."
+---
+
+Every file uploaded through the composer or the API lands here and can be reused
+without uploading again.
+
+## Reuse
+
+Attach from the library instead of re-uploading. The same file can back any
+number of posts.
+
+## Deleting
+
+Removing a file from the library does not affect posts already published — those
+live on the platform. It does break **queued** posts that reference it, which
+will then fail validation.
+
+## Uploading over the API
+
+See [images and video](/general/composer/media) for both upload routes. Every
+upload returns an `id`, which is what a post's `image` array references.
