@@ -4,11 +4,15 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Documentation draft — October 10, 2026.** This guide describes the reviewed
-  backend candidate. Its production deployment, current tool catalog, host
-  connections and publishing-directory approval still need verification. Use
-  only features advertised by your deployed server and client. This page does
-  not establish a live ChatGPT integration or guarantee successful publication.
+  **Deployment status — October 10, 2026.** The reviewed backend is deployed in
+  production. Read-only initialization and tool-list checks verified the same
+  **42 tools**, including **25 named provider helpers**, using a workspace API
+  key in the Authorization header on `/api/mcp` and `/api/mcp-oauth`. These checks
+  did not use OAuth bearer tokens or invoke tools. OAuth flows, host connections,
+  file/widget transfers, Prepare/Commit, provider publishing and directory
+  approval remain pending. Use only features advertised by your server and
+  client. This page does not establish a live ChatGPT integration or guarantee
+  successful publication.
 </Note>
 
 Nushir MCP lets your assistant inspect your connected workspace, channels and
@@ -60,8 +64,8 @@ authorization rather than sharing an owner's key.
 4. Ask: “Show my Nushir workspace timezone and connected channels. Do not change
    anything.” Confirm that the returned workspace and channels are yours.
 
-The candidate supports dynamic client registration (DCR) and S256 PKCE. Hosts
-that require a separately registered confidential OAuth app need the matching
+The deployed backend implements dynamic client registration (DCR) and S256 PKCE.
+Hosts that require a separately registered confidential OAuth app need the matching
 Nushir app and protected client fields; do not invent a client ID or secret.
 The actual host callback must match Nushir's registered/allowlisted callback
 contract. A callback error is a configuration problem to investigate, not a
@@ -80,8 +84,8 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The candidate also exposes 25 separately named provider settings helpers. For
-example, `pinterestListBoards`, `redditGetSubredditRequirements` and
+The deployed catalog also exposes 25 separately named provider settings helpers.
+For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
 the fields in their advertised schema. The selected channel must belong to that
 helper's provider and your connected workspace. Provider-specific settings and
@@ -226,13 +230,19 @@ secrets, authorization codes, confirmation tokens and signed/download/upload URL
 
 ## Acceptance still pending
 
-Before treating this candidate as live, verify its production deployment and
-catalog, OAuth callback/DCR/consent/refresh/revocation, applicable host file and
-widget behavior, and actual Prepare/Commit/receipt flows. Directory/listing
-approval and client-specific acceptance are separate from a successful source
-review or local test run.
+Production deployment and the 42-tool catalog were verified on October 10, 2026
+with a workspace API-key header on both endpoints. The catalog includes 25 named
+provider helpers and excludes external generation, generic selectors and the
+agent wrapper; configured in-app AI remains available. This was initialization
+and tool discovery only, with no tool invocations.
 
-Historical walkthroughs and local unit tests do not establish acceptance of this
-candidate. No new connection, upload, post or publication was made while preparing
-this documentation. These status notes must be revisited after deployment and
-client verification.
+OAuth bearer authentication, callback/DCR/PKCE/consent/refresh/revocation,
+legacy transports, client-specific connections, file/session/widget transfers,
+actual Prepare/Commit/receipt flows and provider publishing still require acceptance
+checks. Directory/listing approval remains pending and is separate from source
+review, local tests or catalog discovery.
+
+Historical walkthroughs do not establish acceptance of this deployed version.
+The October 10 catalog check did not establish OAuth or client-specific host
+acceptance. It invoked no tools, uploaded no media, created no post and published
+no content. Revisit these status notes after the remaining acceptance checks.
