@@ -1,0 +1,248 @@
+---
+title: "Connect your assistant to Nushir"
+description: "MCP setup, media uploads, confirmations and troubleshooting."
+---
+
+<Note>
+  **Deployment status — October 10, 2026.** The reviewed backend is deployed in
+  production. Read-only initialization and tool-list checks verified the same
+  **42 tools**, including **25 named provider helpers**, using a workspace API
+  key in the Authorization header on `/api/mcp` and `/api/mcp-oauth`. These checks
+  did not use OAuth bearer tokens or invoke tools. OAuth flows, host connections,
+  file/widget transfers, Prepare/Commit, provider publishing and directory
+  approval remain pending. Use only features advertised by your server and
+  client. This page does not establish a live ChatGPT integration or guarantee
+  successful publication.
+</Note>
+
+Nushir MCP lets your assistant inspect your connected workspace, channels and
+calendar, import media you choose, and prepare drafts or scheduled posts for your
+confirmation. You need a Nushir account, an eligible workspace and the appropriate
+workspace permissions. Connecting an assistant does not grant access to other
+workspaces or guarantee that a social platform will publish a post.
+
+## Choose your connection
+
+| Your client                                                                            | Server URL                                  | Authentication                                                               |
+| -------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------- |
+| A host that supports remote MCP with OAuth, including the proposed ChatGPT integration | `https://platform.nushir.com/api/mcp-oauth` | Sign in to Nushir and approve the displayed workspace and permissions.       |
+| A trusted client that supports secure custom request headers                           | `https://platform.nushir.com/api/mcp`       | Store your Nushir API key in the client's protected credential/header field. |
+
+Use Streamable HTTP when your client offers a transport choice. Choose the
+endpoint matching your host setup: only `/api/mcp-oauth` supplies the OAuth
+protected-resource discovery and authentication challenge. Use `/api/mcp` for
+a protected bearer-header setup. Both header paths can resolve a valid OAuth or
+personal token; that overlap does not replace OAuth discovery for a host that
+needs it. Older key-in-address HTTP/SSE connections are compatibility routes,
+not the recommended setup. Do not put an API key in a URL. If an old connection
+stops working, migrate to one of the two modes above rather than enabling URL
+credentials.
+
+The API-key header format for MCP is:
+
+```text
+Authorization: Bearer <NUSHIR_API_KEY>
+```
+
+This bearer format is for MCP; the [Public REST API](/public-api/authentication) uses its own authentication format.
+
+`<NUSHIR_API_KEY>` is a placeholder. Retrieve your real key through Nushir
+**Settings → Developers → Access → API Key** and enter it only in the client's
+protected field. Do not paste it into a conversation, screenshot, shared
+configuration or support ticket. An API key delegates workspace access to the
+client; OAuth provides a separate revocable connection tied to the authorizing
+member. Products serving several customers should use each customer's OAuth
+authorization rather than sharing an owner's key.
+
+## Connect with OAuth
+
+1. Open your host's remote MCP connection settings and enter the OAuth server URL
+   above. Use its OAuth connection flow rather than entering an API key.
+2. When redirected to Nushir, sign in and review the application, selected
+   workspace and requested permissions. Cancel if these are unexpected.
+3. After approval, return to the host and refresh its tool catalog.
+4. Ask: “Show my Nushir workspace timezone and connected channels. Do not change
+   anything.” Confirm that the returned workspace and channels are yours.
+
+The deployed backend implements dynamic client registration (DCR) and S256 PKCE.
+Hosts that require a separately registered confidential OAuth app need the matching
+Nushir app and protected client fields; do not invent a client ID or secret.
+The actual host callback must match Nushir's registered/allowlisted callback
+contract. A callback error is a configuration problem to investigate, not a
+reason to disable authentication.
+
+The submission draft requests the existing workspace/channel/post/media read
+permissions, post/media write permissions and `offline_access` for rotating
+refresh access. Permissions and your current workspace role still apply on
+every request. Draft creation does not imply permission to schedule or publish.
+Older broad read/write grants cannot restore tools removed from the catalog.
+
+## What is available
+
+Core operations read workspace context, connected channels, channel groups,
+provider settings, posts and publishing receipts. Post creation and settings
+updates use separate Prepare and Commit operations. There is no MCP post-deletion
+operation; manage deletion in the Nushir app.
+
+The deployed catalog also exposes 25 separately named provider settings helpers.
+For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
+`tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
+the fields in their advertised schema. The selected channel must belong to that
+helper's provider and your connected workspace. Provider-specific settings and
+permissions still need validation before preparing a post.
+
+For TikTok, read current creator settings with `tiktokGetCreatorInfo`. Choose
+Direct Post privacy explicitly, with no preset, from the choices permitted by
+the current creator and application. Honor interaction and video-duration limits
+and review commercial disclosures. Every `DIRECT_POST` requires explicit
+acknowledgment of TikTok's [Music Usage Confirmation](https://www.tiktok.com/legal/page/global/music-usage-confirmation/en).
+When `brand_content_toggle` is true, also acknowledge the [Branded Content Policy](https://www.tiktok.com/legal/page/global/bc-policy/en).
+`UPLOAD` sends an inbox draft that you must finish in TikTok.
+Explicitly authorize the exact content and mode before transfer. Do not default
+or reuse `posting_consent` from another post or treat connecting your account as
+posting consent.
+
+The old generic `triggerTool` selector has been removed. Refresh the catalog and
+use the advertised named helper instead of supplying `methodName` or an invented
+schema. A settings lookup may refresh provider authentication or mark an expired
+channel as needing reconnection; it does not create or publish a post.
+
+**External MCP does not generate images, videos or audio.** Generation tools,
+generation options, voice selection, the generic `videoFunctionTool` selector
+and the `ask_nushir` wrapper are excluded from every external connection,
+including OAuth, API-key and legacy transports. Configured generation remains
+available to Nushir's in-app AI. Uploading media you selected or generated in
+another client remains supported when the server advertises that transfer mode.
+
+## Upload media
+
+If `mediaIngestCapabilitiesTool` is advertised, ask for it before selecting a
+transfer method. The capability tool and file/session/widget bridge are optional;
+their absence does not establish that URL imports are unavailable.
+`uploadFromUrlTool` remains in the core catalog. Follow the actually advertised
+tools, supported MIME types and byte limits.
+
+The MCP bridge ceiling defaults to **64 MiB** and can be configured differently.
+Actual type and session limits can be smaller: images are limited to **10 MiB**,
+or the configured bridge ceiling if lower. A returned upload session's `maxBytes`
+is the minimum of the configured bridge and that file type's limit. Use the
+current capability/session values; a larger limit on another Nushir API does not
+increase the MCP limit.
+
+- `uploadFromUrlTool` imports an approved public HTTPS image/video URL. The
+  source must be accessible and pass Nushir's network, file-type and size checks.
+  Use media you have permission to upload; a webpage or local file path is not
+  an image download URL.
+- `uploadMediaFileTool` works when the host supplies an authorized file with a
+  temporary download URL. A host-specific attachment ID alone is not portable.
+- A capable client can use `createMediaUploadSessionTool` and send the file bytes
+  in a multipart **POST** to its returned `uploadUrl`, using field name `file`
+  and an **Authorization** header whose value is the returned `authorization`.
+  The URL contains a session ID; the separate Authorization value is the
+  short-lived, one-use upload credential. A URL-only upload is not authorized.
+  Keep that credential and upload-session details out of shared material.
+- In a compatible MCP Apps host, `uploadWidgetTool` can open the Nushir device
+  upload widget when the configured server advertises it. Use
+  `uploadWidgetStatusTool` with its session ID to read ready upload receipts.
+
+The widget is optional. Its appearance, file bridge and resource loading depend
+on the host; support in one host does not establish support in another. An empty
+widget status list means there are no currently available ready receipts for
+that session. A previously uploaded item can disappear from the list if it was
+deleted, is missing or no longer belongs to the workspace. Status is not a search
+of your entire media library. If the widget is absent or fails, use another
+advertised transfer method. Do not make private media public solely to bypass a
+host limitation without choosing that disclosure yourself.
+
+Keep the returned Nushir media ID and path. Uploading stores media; it does not
+create, schedule or publish a post.
+
+## Prepare, confirm and commit
+
+1. Ask for workspace context and choose the exact connected channel.
+2. Provide the caption, selected media and provider settings. For a scheduled
+   post, resolve an exact date/time in the workspace timezone; “tomorrow” alone
+   is insufficient. Start with a draft if you want to review inside Nushir.
+3. The assistant calls `prepareSchedulePostTool` and shows the exact prepared
+   account, caption/comment parts, media, privacy/settings and local/UTC timing.
+   Preparation stores an expiring intent; it has not created a post.
+4. Review that preview and explicitly confirm the exact request in a new turn.
+   If anything changes or the intent expires, prepare and confirm again.
+5. The assistant calls `commitSchedulePostTool` with that intent's confirmation
+   token. Keep the returned Nushir post IDs and receipt. Post-settings changes
+   similarly use `preparePostSettingsTool` and `commitPostSettingsTool`.
+
+For a first check, ask: “Prepare a draft on my selected channel. Show its exact
+preview and wait for my confirmation.” Then confirm only after reviewing it.
+Do not ask the assistant to skip preview or confirmation.
+
+A repeated Commit of the same committed intent returns its original receipt
+without creating another database post. Keep the same intent/request identity
+when checking an interrupted result. Creating a new request is a different action
+and could create another post.
+
+`COMMITTED` means Nushir saved the prepared request. A draft stays a draft; a
+scheduled request still needs its publishing workflow and provider acceptance.
+Neither Commit nor a preview URL guarantees delivery or public visibility.
+
+Read `postStatusTool` for each returned post ID. Report its Nushir state,
+`providerReleaseId`, `providerReleaseUrl`, `error` and `providerConfirmed`
+truthfully. `providerConfirmed` reflects a stored provider receipt, not an
+independent visual check of public delivery. A profile URL, private TikTok post
+or TikTok inbox receipt is not proof of a publicly visible post. If status is
+uncertain, inspect it read-only; do not create another post to “retry” delivery.
+
+## Reconnect or revoke access
+
+If a social channel requires reconnection, reconnect that channel inside Nushir
+and read its current settings again before preparing another request. Changing
+the assistant connection alone does not repair the provider's credentials.
+
+To revoke OAuth access, open Nushir **Settings → Approved Apps** and revoke the
+specific authorization. Disconnect it in the host as well. Simply removing a host
+entry should not be treated as proof that its Nushir grant was revoked. A later
+connection requires fresh approval, and current membership/role requirements
+still apply.
+
+For an API-key connection, remove the client's stored key. If a key was exposed
+or you need to invalidate existing clients, use Nushir's **Rotate Key** control
+and update every legitimate client that used the old workspace key. Never send
+either key to support.
+
+## Troubleshooting
+
+| Symptom                                                               | What to check                                                                                                                                              |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authentication fails or HTTP 401                                      | Correct endpoint/mode, secure header format, current key or OAuth connection, and active workspace membership. Reauthorize if appropriate.                 |
+| OAuth callback, PKCE or registration error                            | Exact host callback and client setup. Preserve the reported error; ask support to review it without sharing codes, tokens or secrets.                      |
+| Permission denied                                                     | Requested scopes, your current workspace role and the requested action. Reconnecting cannot bypass a role restriction.                                     |
+| A tool is missing                                                     | Refresh the catalog. Generation/selectors/wrapper were intentionally removed. Upload widgets require configured server capabilities and a compatible host. |
+| Named helper rejects a channel/input                                  | Choose a channel from your workspace for that provider and follow the tool's advertised schema. Unknown fields are rejected.                               |
+| Channel needs reconnection                                            | Reconnect the provider in Nushir, then reread its settings. A helper may already have attempted one bounded credential refresh.                            |
+| Media import fails                                                    | Direct HTTPS download access, expiry, advertised MIME/size limits and an actually supported transfer mode. Renaming a file does not convert its format.    |
+| Widget hangs or shows no ready files                                  | Reopen an expired session, inspect upload status and use another advertised method if the host does not support the widget.                                |
+| Prepare rejects timezone or Commit says `EXPIRED`                     | Reread workspace context, prepare the exact request again and obtain a fresh confirmation.                                                                 |
+| Commit says `PROCESSING`, status is uncertain or a provider times out | Retain the intent and post IDs; inspect status/receipts without making a new request. Escalate an unresolved outcome instead of blindly duplicating it.    |
+
+When requesting [support](/general/support), include the client name, approximate time, failing tool,
+sanitized error and relevant Nushir post ID. Omit passwords, API keys, client
+secrets, authorization codes, confirmation tokens and signed/download/upload URLs.
+
+## Acceptance still pending
+
+Production deployment and the 42-tool catalog were verified on October 10, 2026
+with a workspace API-key header on both endpoints. The catalog includes 25 named
+provider helpers and excludes external generation, generic selectors and the
+agent wrapper; configured in-app AI remains available. This was initialization
+and tool discovery only, with no tool invocations.
+
+OAuth bearer authentication, callback/DCR/PKCE/consent/refresh/revocation,
+legacy transports, client-specific connections, file/session/widget transfers,
+actual Prepare/Commit/receipt flows and provider publishing still require acceptance
+checks. Directory/listing approval remains pending and is separate from source
+review, local tests or catalog discovery.
+
+Historical walkthroughs do not establish acceptance of this deployed version.
+The October 10 catalog check did not establish OAuth or client-specific host
+acceptance. It invoked no tools, uploaded no media, created no post and published
+no content. Revisit these status notes after the remaining acceptance checks.
