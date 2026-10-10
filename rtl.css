@@ -34,9 +34,9 @@ html[lang="ar"] [role="dialog"] textarea {
  * column reserves space with a physical margin-left - neither responds to
  * direction, so the column stayed pinned to the left while everything else
  * flipped. Mirror both explicitly, desktop only (the sidebar is hidden below
- * lg, where none of this applies). Selectors match the theme's own utility
- * classes, so a theme update that renames them fails soft: the layout falls
- * back to flipped-content-with-left-sidebar rather than breaking.
+ * lg, where none of this applies). Use the content container's stable ID:
+ * newer renderers use a sidebar-width variable instead of the old utility
+ * class. Keep the old selector for earlier renderers.
  */
 @media (min-width: 1024px) {
   html[lang="ar"] #sidebar {
@@ -48,8 +48,9 @@ html[lang="ar"] [role="dialog"] textarea {
   html[lang="ar"].dark #sidebar {
     border-left-color: rgb(255 255 255 / 0.07);
   }
+  html[lang="ar"] #content-container,
   html[lang="ar"] [class*="lg:ml-[19rem]"] {
     margin-left: 0 !important;
-    margin-right: 19rem !important;
+    margin-right: var(--sidebar-width, 19rem) !important;
   }
 }
