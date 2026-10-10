@@ -132,7 +132,8 @@
                   "general/automations/auto-post-rss",
                   "general/automations/webhooks",
                   "general/automations/third-party",
-                  "general/agents"
+                  "general/agents",
+                  "mcp/introduction"
                 ]
               },
               {
@@ -379,7 +380,8 @@
                   "ar/general/automations/auto-post-rss",
                   "ar/general/automations/webhooks",
                   "ar/general/automations/third-party",
-                  "ar/general/agents"
+                  "ar/general/agents",
+                  "ar/mcp/introduction"
                 ]
               },
               {
