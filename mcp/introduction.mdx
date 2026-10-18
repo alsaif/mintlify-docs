@@ -4,15 +4,16 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Deployment status — October 10, 2026.** The reviewed backend is deployed in
-  production. Read-only initialization and tool-list checks verified the same
-  **42 tools**, including **25 named provider helpers**, using a workspace API
-  key in the Authorization header on `/api/mcp` and `/api/mcp-oauth`. These checks
-  did not use OAuth bearer tokens or invoke tools. OAuth flows, host connections,
-  file/widget transfers, Prepare/Commit, provider publishing and directory
-  approval remain pending. Use only features advertised by your server and
-  client. This page does not establish a live ChatGPT integration or guarantee
-  successful publication.
+  **Production status — October 19, 2026.** MCP server **1.5.1** is deployed.
+  Fresh live discovery verified **40 tools**, including **23 named provider
+  helpers**, with media and widget features enabled. Claude's refreshed catalog
+  lists **39 model-visible tools** plus **one App-only upload helper**.
+  Earlier genuine Claude tests
+  successfully read workspace data, imported media, saved an explicitly confirmed
+  draft, updated its settings and used the upload widget; they do not establish
+  successful live access to every provider. Use only features advertised by
+  your server and client. Directory approval remains pending. This page does not
+  establish a live ChatGPT integration or guarantee successful publication.
 </Note>
 
 Nushir MCP lets your assistant inspect your connected workspace, channels and
@@ -84,12 +85,18 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The deployed catalog also exposes 25 separately named provider settings helpers.
+The server 1.5.1 catalog exposes 23 separately named provider settings helpers.
 For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
 the fields in their advertised schema. The selected channel must belong to that
 helper's provider and your connected workspace. Provider-specific settings and
 permissions still need validation before preparing a post.
+
+**Skool is unavailable through external MCP while provider permission remains
+unresolved.** Its two named helpers, channel/schema exposure, post preparation,
+scheduling and settings changes are blocked, including replay of an older
+prepared request. Other providers remain subject to their own permissions.
+This external boundary does not change Nushir's app UI or internal agents.
 
 For TikTok, read current creator settings with `tiktokGetCreatorInfo`. Choose
 Direct Post privacy explicitly, with no preset, from the choices permitted by
@@ -177,9 +184,11 @@ preview and wait for my confirmation.” Then confirm only after reviewing it.
 Do not ask the assistant to skip preview or confirmation.
 
 A repeated Commit of the same committed intent returns its original receipt
-without creating another database post. Keep the same intent/request identity
-when checking an interrupted result. Creating a new request is a different action
-and could create another post.
+without creating another database post only while current authorization and
+provider availability still permit the request. An older intent cannot bypass
+a blocked provider. Keep the same intent/request identity when checking an
+interrupted result. Creating a new request is a different action and could
+create another post.
 
 `COMMITTED` means Nushir saved the prepared request. A draft stays a draft; a
 scheduled request still needs its publishing workflow and provider acceptance.
@@ -228,21 +237,26 @@ When requesting [support](/general/support), include the client name, approximat
 sanitized error and relevant Nushir post ID. Omit passwords, API keys, client
 secrets, authorization codes, confirmation tokens and signed/download/upload URLs.
 
-## Acceptance still pending
+## Verification and remaining acceptance
 
-Production deployment and the 42-tool catalog were verified on October 10, 2026
-with a workspace API-key header on both endpoints. The catalog includes 25 named
-provider helpers and excludes external generation, generic selectors and the
-agent wrapper; configured in-app AI remains available. This was initialization
-and tool discovery only, with no tool invocations.
+Genuine Claude checks on the earlier release succeeded for workspace, channel,
+calendar and status reads, a Slack destination lookup, URL image import, confirmed
+draft Prepare/Commit and readback, settings Prepare/Commit and readback, and
+device-upload widget success and unsupported-file validation. The disposable
+draft was removed afterward; existing visible posts were unchanged. No external
+social post was created by those checks.
 
-OAuth bearer authentication, callback/DCR/PKCE/consent/refresh/revocation,
-legacy transports, client-specific connections, file/session/widget transfers,
-actual Prepare/Commit/receipt flows and provider publishing still require acceptance
-checks. Directory/listing approval remains pending and is separate from source
-review, local tests or catalog discovery.
+These results are bounded: some other provider checks exercised only a
+missing-channel or invalid-input response, not a successful live provider call.
+They are not exhaustive provider acceptance. Server 1.5.1 deployment, fresh catalog
+discovery and invocation coverage for all 40 exposed tools are verified. Coverage
+includes boundary/error checks, not successful live access to every provider.
+The complete enabled catalog has 40 tools and 23 provider helpers; optional
+features and App-only visibility can reduce what a client displays. External
+generation, generic selectors and the agent wrapper remain excluded; configured
+in-app AI remains available.
 
-Historical walkthroughs do not establish acceptance of this deployed version.
-The October 10 catalog check did not establish OAuth or client-specific host
-acceptance. It invoked no tools, uploaded no media, created no post and published
-no content. Revisit these status notes after the remaining acceptance checks.
+The full OAuth lifecycle, legacy transports, other clients, transfer methods not
+demonstrated above and provider publishing require their own acceptance checks.
+Directory/listing approval remains pending and is separate from source review,
+local tests, catalog discovery or the successful Claude draft workflow.
