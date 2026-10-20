@@ -1,3 +1,12 @@
 ---
 openapi: "public-api/openapi.yaml GET /posts"
 ---
+
+
+## Review feedback
+
+Post results include `approvalStatus`, the latest `approvalNote`, and nullable
+`reviewCanceledAt`. A request for changes keeps the post as `DRAFT`; a canceled
+draft also stays `DRAFT` with a cancellation timestamp. Reading these fields does
+not submit, approve or publish anything. Use the Nushir review controls or the
+confirmed MCP review tools to submit a corrected draft for review.

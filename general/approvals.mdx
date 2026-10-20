@@ -1,27 +1,54 @@
 ---
-title: "Sharing a post for approval"
-description: "Send a preview link and collect comments before anything publishes."
+title: "Review and approve posts"
+description: "Approve a draft, request changes with a note, or cancel it while keeping its history."
 ---
 
-Useful when a client signs off before publication.
+Open a post in the calendar to see its full caption, media, schedule and review
+history. Workspace admins can review a draft directly.
 
-## How it works
+## Review actions
 
-Open a post and share its preview link. The recipient sees the post as it will
-appear, per channel, and can comment. They do not need a Nushir account and
-cannot see the rest of your calendar.
+| Action | What happens |
+| --- | --- |
+| **Approve & schedule** | Validates the draft and schedules it for its future publish time. An admin does not need to request approval first. |
+| **Request changes** | Requires a note explaining what to fix, up to 500 characters. The post stays a draft and the feedback stays on the post. |
+| **Cancel post** | Keeps a canceled draft, its content and review history. It will not publish. A cancellation note is optional. |
 
-## What the link exposes
+Cancellation here applies to a draft. Queued and published posts retain their
+existing editing and scheduling controls.
 
-Only that post: its content, media and target channels. Not your other posts,
-not your channel list, not your account.
+## Make corrections and resubmit
 
-## Approval is not a gate
+A member can edit a returned draft and choose **Resubmit for review**. Choose a
+future publish time first. It stays a draft until an admin approves it. An admin
+can approve a corrected draft directly.
 
-<Warning>
-A shared post still publishes at its scheduled time whether or not anyone has
-approved it. The link collects feedback; it does not hold the post.
+For a canceled draft, **Resubmit for review** reopens it. Previous feedback stays
+in the review history, including after a new submission replaces the latest note.
 
-If sign-off is genuinely required, keep the post as a **draft** and schedule it
-once approved.
-</Warning>
+## Who receives the feedback?
+
+Nushir uses the submitting member or the trusted account that created the post.
+If a shared API/MCP credential has no identifiable human submitter, the reviewer
+chooses an active workspace member under **Send feedback to**. A shared token
+does not identify a separate agent email address.
+
+The recipient gets an in-app notification linking to the post. Review email
+follows their **Settings → Global Settings → Post review emails** preference,
+which is off by default. Publishing-success and publishing-failure email
+preferences remain separate. Queued email is not a delivery receipt.
+
+MCP clients can read `approvalStatus`, `approvalNote` and `reviewCanceledAt` with
+Get Post Status or List Posts. They check feedback on demand; Nushir does not
+wake a disconnected assistant. See [MCP review submissions](/mcp/introduction#request-review-and-handle-feedback).
+
+## Shared preview comments
+
+You can also share a post's preview link with a client. The link exposes that
+post's content, media and target channels; the recipient can comment without
+seeing the rest of your workspace. Private review notes and actor details stay
+inside the workspace; they are excluded from public preview responses.
+
+Public preview comments collect feedback. They do not perform the workspace
+review actions above or stop a post that is already scheduled. Keep a post as a
+draft when you need sign-off before scheduling it.

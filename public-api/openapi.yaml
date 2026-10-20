@@ -194,6 +194,20 @@ components:
         state:
           type: string
           enum: [QUEUE, PUBLISHED, ERROR, DRAFT]
+        approvalStatus:
+          type: string
+          enum: [NOT_REQUIRED, PENDING, APPROVED, REJECTED]
+          description: Workspace review status. REJECTED means changes were requested; inspect reviewCanceledAt for cancellation.
+        approvalNote:
+          type: [string, 'null']
+          description: Latest plain-text review or submission note, not an instruction to publish.
+        reviewCanceledAt:
+          type: [string, 'null']
+          format: date-time
+          description: A non-null value marks a canceled draft. Use Resubmit for review after correcting it.
+        updatedAt:
+          type: string
+          format: date-time
         integration: { $ref: '#/components/schemas/Integration' }
     Error:
       type: object
