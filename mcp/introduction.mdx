@@ -4,13 +4,13 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Production status — October 20, 2026.** MCP server **1.6.0** is deployed.
-  Read-only discovery verifies **43 raw tools**, including **25 named provider
-  helpers**. One upload helper is App-only, leaving **42 model-visible tools**
+  **Production status — October 20, 2026.** MCP server **1.7.0** is deployed.
+  Read-only discovery verifies **45 raw tools**, including **25 named provider
+  helpers**. One upload helper is App-only, leaving **44 model-visible tools**
   when all optional features are enabled; client visibility can vary.
   Earlier Claude checks cover workspace reads, media transfer and confirmed
   draft/settings operations. They do not establish live access to every provider
-  or fresh acceptance of the three added tools in Claude. Directory approval
+  or fresh Claude acceptance of tools added since those checks. Directory approval
   remains pending, and discovery does not guarantee successful publication.
 </Note>
 
@@ -83,7 +83,7 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The server 1.6.0 catalog exposes 25 separately named provider settings helpers,
+The server 1.7.0 catalog exposes 25 separately named provider settings helpers,
 including `linkedinFindCompany` and `linkedinPageFindCompany` for company mentions.
 For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
@@ -296,8 +296,9 @@ These results are bounded: some other provider checks exercised only a
 missing-channel or invalid-input response, not a successful live provider call.
 They are not exhaustive provider acceptance. The previous 1.5.1 release had
 invocation coverage for its 40 tools, including boundary/error responses. Current
-1.6.0 read-only deployment checks verify discovery, media listing and the public
-media endpoint. The 43-tool/25-helper inventory is not a claim that every provider
+1.7.0 read-only deployment checks verify discovery, media listing, review feedback
+through status/list, private-field exclusion on public previews and the public
+media endpoint. The 45-tool/25-helper inventory is not a claim that every provider
 has passed a live call or that Claude has refreshed its catalog. External
 generation, generic selectors and the agent wrapper remain excluded; configured
 in-app AI remains available.
