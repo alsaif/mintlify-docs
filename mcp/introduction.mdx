@@ -4,16 +4,14 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Production status — October 19, 2026.** MCP server **1.5.1** is deployed.
-  Fresh live discovery verified **40 tools**, including **23 named provider
-  helpers**, with media and widget features enabled. Claude's refreshed catalog
-  lists **39 model-visible tools** plus **one App-only upload helper**.
-  Earlier genuine Claude tests
-  successfully read workspace data, imported media, saved an explicitly confirmed
-  draft, updated its settings and used the upload widget; they do not establish
-  successful live access to every provider. Use only features advertised by
-  your server and client. Directory approval remains pending. This page does not
-  establish a live ChatGPT integration or guarantee successful publication.
+  **Production status — October 20, 2026.** MCP server **1.6.0** is deployed.
+  Read-only discovery verifies **43 raw tools**, including **25 named provider
+  helpers**. One upload helper is App-only, leaving **42 model-visible tools**
+  when all optional features are enabled; client visibility can vary.
+  Earlier Claude checks cover workspace reads, media transfer and confirmed
+  draft/settings operations. They do not establish live access to every provider
+  or fresh acceptance of the three added tools in Claude. Directory approval
+  remains pending, and discovery does not guarantee successful publication.
 </Note>
 
 Nushir MCP lets your assistant inspect your connected workspace, channels and
@@ -85,7 +83,8 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The server 1.5.1 catalog exposes 23 separately named provider settings helpers.
+The server 1.6.0 catalog exposes 25 separately named provider settings helpers,
+including `linkedinFindCompany` and `linkedinPageFindCompany` for company mentions.
 For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
 the fields in their advertised schema. The selected channel must belong to that
@@ -120,6 +119,22 @@ and the `ask_nushir` wrapper are excluded from every external connection,
 including OAuth, API-key and legacy transports. Configured generation remains
 available to Nushir's in-app AI. Uploading media you selected or generated in
 another client remains supported when the server advertises that transfer mode.
+
+## Browse stored media
+
+Use `mediaListTool` with an integer `page` from 1 to 100000 (default 1) to list files in your
+connected workspace, 18 per page. The result includes `page`, `pages`, `total`
+and `items` with `id`, `name`, `originalName`, `path` and `createdAt`. Deleted files
+are excluded. It requires media-read permission and does not upload or change
+anything. Alt text and video covers belong to individual posts, rather than the
+library record.
+
+Scheduling still accepts attachment URL strings. It also accepts an attachment
+object with `path` and optional `alt`, `thumbnail` and `thumbnailTimestamp`.
+Use an approved JPEG/PNG URL for `thumbnail`; the timestamp is a nonnegative
+integer in milliseconds, at most 86,400,000, and alt text is at most 2,000
+characters. Include all attachment metadata in the preview you confirm; changed
+metadata requires a new preparation and confirmation.
 
 ## Upload media
 
@@ -248,11 +263,11 @@ social post was created by those checks.
 
 These results are bounded: some other provider checks exercised only a
 missing-channel or invalid-input response, not a successful live provider call.
-They are not exhaustive provider acceptance. Server 1.5.1 deployment, fresh catalog
-discovery and invocation coverage for all 40 exposed tools are verified. Coverage
-includes boundary/error checks, not successful live access to every provider.
-The complete enabled catalog has 40 tools and 23 provider helpers; optional
-features and App-only visibility can reduce what a client displays. External
+They are not exhaustive provider acceptance. The previous 1.5.1 release had
+invocation coverage for its 40 tools, including boundary/error responses. Current
+1.6.0 read-only deployment checks verify discovery, media listing and the public
+media endpoint. The 43-tool/25-helper inventory is not a claim that every provider
+has passed a live call or that Claude has refreshed its catalog. External
 generation, generic selectors and the agent wrapper remain excluded; configured
 in-app AI remains available.
 

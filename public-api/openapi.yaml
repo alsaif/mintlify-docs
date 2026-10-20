@@ -23,12 +23,9 @@ info:
     Authorization: your-api-key
     ```
 
-    Two kinds of credential are accepted on the same header:
-
-    - **An API key**, created in *Settings → Developers*. It is scoped to the
-      organisation that created it.
-    - **An OAuth token**, issued to an approved app. These are recognised by
-      their `pos_` prefix and resolve to the organisation that granted access.
+    Use an organization API key created in *Settings → Developers*.
+    It is scoped to the workspace that created it. MCP OAuth tokens cannot
+    access this REST API; use the OAuth MCP endpoint for delegated clients.
 
     A missing or unrecognised credential returns `401`.
 
@@ -92,8 +89,8 @@ components:
       in: header
       name: Authorization
       description: |
-        Your API key from *Settings → Developers*, or an OAuth token beginning
-        `pos_`. Sent raw — do **not** prefix it with `Bearer`.
+        Your organization API key from *Settings → Developers*. MCP OAuth tokens
+        are rejected. Send the key raw — do **not** prefix it with `Bearer`.
   schemas:
     Integration:
       type: object
@@ -597,6 +594,50 @@ paths:
                 releaseURL: { type: string }
       responses:
         '200': { description: Updated. }
+
+  /media:
+    get:
+      tags: [Uploads]
+      summary: List stored media
+      operationId: listMedia
+      description: |
+        Lists non-deleted media belonging to the authenticated workspace,
+        18 per page, newest first. This read does not modify files. Post alt
+        text, covers and timestamps are not library metadata.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100000
+            default: 1
+      responses:
+        '200':
+          description: A bounded page of workspace media.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [page, pages, total, items]
+                properties:
+                  page: { type: integer }
+                  pages: { type: integer }
+                  total: { type: integer }
+                  items:
+                    type: array
+                    maxItems: 18
+                    items:
+                      type: object
+                      required: [id, name, originalName, path, createdAt]
+                      properties:
+                        id: { type: string }
+                        name: { type: string }
+                        originalName: { type: [string, 'null'] }
+                        path: { type: string }
+                        createdAt: { type: string, format: date-time }
+        '400': { description: Invalid page. }
+        '401': { description: Invalid or missing organization API key. }
 
   /upload:
     post:
