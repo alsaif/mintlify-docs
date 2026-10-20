@@ -77,3 +77,10 @@ Building something incrementally? Create posts with `"type": "draft"` — drafts
 skip settings validation, so you can assemble one over several calls, then use
 `/posts/{id}/missing` to see what is still outstanding.
 </Tip>
+
+## Browse stored media
+
+`GET /media?page=1` lists non-deleted files from your authenticated workspace,
+18 per page. The response contains `page`, `pages`, `total` and `items`. Each
+item has `id`, `name`, `originalName`, `path` and `createdAt`. Alt text and covers
+belong to individual posts. The page must be an integer from 1 to 100000.

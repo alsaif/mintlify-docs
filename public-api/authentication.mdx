@@ -1,6 +1,6 @@
 ---
 title: "Authentication"
-description: "One header, two kinds of credential."
+description: "Authenticate REST requests with your workspace API key."
 ---
 
 ```
@@ -12,16 +12,14 @@ No `Bearer` prefix. The key is sent raw. Adding `Bearer ` returns `401`, and it
 is the single most common first-call mistake.
 </Warning>
 
-## Two credentials, one header
+## Workspace API key
 
 **API key** — from *Settings → Developers*. Scoped to the organisation that
 created it. This is what you want for your own integration.
 
-**OAuth token** — issued to an approved app so other people can connect *their*
-Nushir account to your product. Recognised by a `pos_` prefix, and resolves to
-the organisation that granted access.
-
-Both go on the same header; the server tells them apart by the prefix.
+MCP OAuth tokens, including tokens beginning with `pos_`, are rejected by this
+REST API. Delegated assistant connections use the [MCP OAuth endpoint](/mcp/introduction)
+and its advertised permissions. Do not send an MCP token to a REST endpoint.
 
 ## Scope
 

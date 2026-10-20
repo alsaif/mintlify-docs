@@ -225,6 +225,7 @@
               {
                 "group": "Uploads",
                 "pages": [
+                  "public-api/uploads/list-media",
                   "public-api/uploads/upload-file",
                   "public-api/uploads/upload-from-url"
                 ]
@@ -473,6 +474,7 @@
               {
                 "group": "الرفع",
                 "pages": [
+                  "public-api/uploads/list-media",
                   "public-api/uploads/upload-file",
                   "public-api/uploads/upload-from-url"
                 ]

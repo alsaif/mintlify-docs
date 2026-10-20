@@ -1,32 +1,28 @@
 ---
-title: "OAuth apps"
-description: "Let other people connect their Nushir account to your product."
+title: "OAuth and the REST API"
+description: "Choose the supported authentication method for your integration."
 ---
 
-An API key acts as *your* organisation. An **OAuth app** is for the other
-direction: your product's users grant it access to *their* Nushir account.
+The public REST API requires an organization API key. MCP OAuth tokens cannot
+access its routes; sending one returns `401`. A token beginning with `pos_` does
+not act as a REST API key.
 
-## The flow
+For your own server integration, use the raw key header described in
+[Authentication](/public-api/authentication).
 
-1. Create the OAuth app in *Settings → Developers*.
-2. Send the user to the authorisation URL; they approve on Nushir's side.
-3. Your app receives a token with a `pos_` prefix.
-4. Send it on the `Authorization` header — raw, no `Bearer` — exactly like an
-   API key. The server resolves it to the granting organisation.
+## Delegated assistant connections
 
-```bash
-curl https://platform.nushir.com/api/public/v1/integrations \
-  -H "Authorization: pos_xxxxxxxxxxxx"
+Assistants that support remote MCP with OAuth connect to:
+
+```text
+https://platform.nushir.com/api/mcp-oauth
 ```
 
-## Scope
+The user signs in to Nushir and approves the application, workspace and displayed
+permissions. MCP checks those permissions and the member's current workspace
+role. Follow the [MCP connection guide](/mcp/introduction) for discovery,
+authorization and supported tools; a REST client cannot substitute an MCP token
+for its API key.
 
-A `pos_` token has the same reach into the granting organisation as an API key
-has into yours: the whole surface. Ask users for access only when your product
-genuinely needs it, and expect it to be revoked at any time.
-
-## Revocation
-
-Users revoke a grant from their own developer settings; revoked tokens fail
-with `401` immediately. Handle that as a normal state, not an error — prompt
-the user to reconnect.
+Users can revoke an assistant connection in **Settings → Approved Apps**.
+If authorization expires or is revoked, follow the client's reconnection flow.
