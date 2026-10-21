@@ -4,7 +4,7 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Production status — October 20, 2026.** MCP server **1.7.0** is deployed.
+  **Production status — October 21, 2026.** MCP server **1.8.0** is deployed.
   Read-only discovery verifies **45 raw tools**, including **25 named provider
   helpers**. One upload helper is App-only, leaving **44 model-visible tools**
   when all optional features are enabled; client visibility can vary.
@@ -83,7 +83,7 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The server 1.7.0 catalog exposes 25 separately named provider settings helpers,
+The server 1.8.0 catalog exposes 25 separately named provider settings helpers,
 including `linkedinFindCompany` and `linkedinPageFindCompany` for company mentions.
 For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
@@ -216,9 +216,38 @@ independent visual check of public delivery. A profile URL, private TikTok post
 or TikTok inbox receipt is not proof of a publicly visible post. If status is
 uncertain, inspect it read-only; do not create another post to “retry” delivery.
 
+## Complete missing TikTok settings
+
+An incomplete draft can be saved for later review. It is not ready for approval
+or publication. Prepare Schedule Post, draft receipts, Get Post Status, List
+Posts and Prepare Post Review expose `settingsReadiness` for supported providers.
+A result of `null` means that provider has no settings-readiness check; it does
+not confirm that the post can publish.
+
+For TikTok, `status: "incomplete"` includes every current issue as `field`,
+`label`, `message` and `code` (`missing`, `invalid` or `restricted`). A saved
+draft also includes `completionUrl`, which opens its native Nushir review panel.
+Prepare Post Settings shows readiness for its proposed settings; new Commit
+Post Settings receipts include it too. Read readiness again after corrections.
+A replay of an older receipt may not contain this newer field.
+
+Open **Complete TikTok settings**, choose the permitted audience, posting method
+and other options, and confirm consent for that exact post. Nushir checks the
+creator's current permissions in the form. Direct Post currently remains subject
+to Nushir's private-account/Self only restriction while its TikTok review is
+pending. Saving settings keeps the post as a draft; an admin then chooses
+**Approve & schedule** separately. If another editor changes the draft, refresh
+and review the new version before saving.
+
+Do not infer audience or consent to clear an error, or switch to `UPLOAD`
+without the user's choice. Changing publishing settings through MCP also
+requires fresh consent; a stored `posting_consent: true` is not reused for changed
+choices. Settings readiness does not replace media, publish-time or provider
+validation at approval.
+
 ## Request review and handle feedback
 
-With the **1.7.0** catalog, assistants can submit an existing draft for admin
+With the **1.8.0** catalog, assistants can submit an existing draft for admin
 review without scheduling or publishing it. Refresh your client's catalog if the
 review tools are missing.
 
@@ -296,7 +325,7 @@ These results are bounded: some other provider checks exercised only a
 missing-channel or invalid-input response, not a successful live provider call.
 They are not exhaustive provider acceptance. The previous 1.5.1 release had
 invocation coverage for its 40 tools, including boundary/error responses. Current
-1.7.0 read-only deployment checks verify discovery, media listing, review feedback
+1.8.0 read-only deployment checks verify discovery, media listing, review feedback
 through status/list, private-field exclusion on public previews and the public
 media endpoint. The 45-tool/25-helper inventory is not a claim that every provider
 has passed a live call or that Claude has refreshed its catalog. External

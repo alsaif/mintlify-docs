@@ -8,8 +8,9 @@ on the channel's `identifier`, and for several platforms it is **required** —
 omit it and the call returns `400`.
 
 <Note>
-`settings` is ignored when `"type": "draft"`. That is the intended way to build
-a post incrementally before you know every field.
+Drafts may save incomplete `settings` so you can build a post incrementally.
+The saved choices still need validation before scheduling or approval. A saved
+draft is not confirmation that its settings are ready to publish.
 </Note>
 
 ## Where the shape comes from
@@ -22,23 +23,34 @@ API, the accepted fields change with it.
 
 <AccordionGroup>
   <Accordion title="tiktok">
+    An incomplete draft can start with:
+
     ```json
-    {
-      "__type": "tiktok",
-      "privacy_level": "PUBLIC_TO_EVERYONE",
-      "content_posting_method": "DIRECT_POST",
-      "disable_comment": false,
-      "disable_duet": false,
-      "disable_stitch": false,
-      "brand_content_toggle": false,
-      "brand_organic_toggle": false
-    }
+    { "__type": "tiktok", "title": "Draft for review" }
     ```
 
-    `content_posting_method` is the one that matters. `DIRECT_POST` publishes to
-    the profile. `UPLOAD` sends it to the creator's TikTok inbox as a draft they
-    must finish within 24 hours — and in that mode **every other setting here is
-    silently discarded**, including privacy level.
+    This example is deliberately incomplete. Before approval or scheduling,
+    complete the provider settings in Nushir or use the confirmed MCP settings
+    flow. Read the current schema with MCP Integration Schema and current creator
+    choices with `tiktokGetCreatorInfo`.
+
+    | Field | Selection required for Direct Post |
+    | --- | --- |
+    | `content_posting_method` | Explicitly choose `DIRECT_POST` for publication or `UPLOAD` for a TikTok inbox draft. |
+    | `privacy_level` | Choose a current permitted creator audience; never preset it. Nushir currently restricts Direct Post to Self only while application review is pending. |
+    | `comment`, `duet`, `stitch` | Boolean interaction choices, subject to creator permissions and media type. These are not `disable_*` fields. |
+    | `autoAddMusic` | `yes` or `no`; automatic music applies to photos. |
+    | `brand_organic_toggle`, `brand_content_toggle`, `disclose` | Accurate commercial disclosure choices. Branded content cannot use Self only. |
+    | `posting_consent` | `true` only after the user explicitly authorizes this exact post and posting method. Changed choices require fresh consent. |
+
+    `UPLOAD` sends content to TikTok's inbox for the creator to finish publishing.
+    It does not apply Direct Post privacy or interaction settings. Never choose
+    it automatically to bypass an incomplete Direct Post request. Review photo
+    titles and video captions in TikTok where the selected mode requires it.
+
+    The native review panel and MCP `settingsReadiness` identify missing or invalid
+    choices before approval. Saving completed settings keeps the post as a draft;
+    approval separately validates media and a future publish time.
   </Accordion>
 
   <Accordion title="reddit">
