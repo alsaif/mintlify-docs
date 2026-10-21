@@ -10,7 +10,10 @@ omit it and the call returns `400`.
 <Note>
 Drafts may save incomplete `settings` so you can build a post incrementally.
 The saved choices still need validation before scheduling or approval. A saved
-draft is not confirmation that its settings are ready to publish.
+draft is not confirmation that its settings are ready to publish. MCP rejects
+incomplete settings by default; `allowIncompleteSettings: true` is only for a
+draft the user explicitly chooses to complete later in Nushir. It never permits
+scheduling or immediate publication.
 </Note>
 
 ## Where the shape comes from
@@ -101,9 +104,22 @@ API, the accepted fields change with it.
     A board is required.
   </Accordion>
 
-  <Accordion title="x, mastodon, bluesky, threads">
+  <Accordion title="x">
+    Regular X posts require an explicit `who_can_reply_post` choice:
+    `everyone`, `following`, `mentionedUsers`, `subscribers` or `verified`.
+    Never infer it. Existing drafts can use **Complete X settings** in the review
+    panel. X articles have additional requirements and use the full editor.
+
     ```json
-    { "__type": "x" }
+    { "__type": "x", "post_type": "post", "who_can_reply_post": "following" }
+    ```
+
+    This is an example user choice, not a default.
+  </Accordion>
+
+  <Accordion title="mastodon, bluesky, threads">
+    ```json
+    { "__type": "mastodon" }
     ```
 
     No required fields. Multi-part posts become native threads on these
