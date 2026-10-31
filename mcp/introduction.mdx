@@ -244,9 +244,12 @@ A replay of an older receipt may not contain this newer field.
 
 Open **Complete TikTok settings**, choose the permitted audience, posting method
 and other options, and confirm consent for that exact post. Nushir checks the
-creator's current permissions in the form. Direct Post currently remains subject
-to Nushir's private-account/Self only restriction while its TikTok review is
-pending. Saving settings keeps the post as a draft; an admin then chooses
+creator's current permissions in the form. Nushir's approved production app now
+supports Direct Post with the privacy choices returned for that creator. Read
+`privacyLevelOptions` and `directPostRestricted` from **Get TikTok Posting Permissions** (`tiktokGetCreatorInfo`);
+only offer the returned choices, and apply a private-only restriction when the
+helper reports it. Existing saved audiences are never upgraded automatically.
+Saving settings keeps the post as a draft; an admin then chooses
 **Approve & schedule** separately. If another editor changes the draft, refresh
 and review the new version before saving.
 
