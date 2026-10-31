@@ -18,7 +18,16 @@ here. See [connect a channel](/general/channels/connect) for the general flow.
 
 ## Worth knowing
 
-`content_posting_method` decides everything: `DIRECT_POST` publishes; `UPLOAD` sends a draft to the creator's inbox and silently discards every other setting. Until the API audit passes, posts may be restricted to creator-only visibility.
+`content_posting_method` selects the flow: `DIRECT_POST` submits for direct
+publication; `UPLOAD` sends a draft to the creator's inbox to finish in TikTok.
+An inbox upload is not a published post.
+
+Nushir's production app is approved for Direct Post. Choose an audience from the
+creator's current permitted options; these can include Public, Friends or Self
+only. Availability still depends on the connected creator. A saved Self only
+post stays private unless you explicitly change its audience. Confirm the exact
+post's settings and TikTok's applicable music-use acknowledgment before sending.
+Nushir reports publication only after TikTok confirms completion.
 
 ## Posting over the API
 
