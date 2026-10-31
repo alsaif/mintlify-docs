@@ -4,15 +4,19 @@ description: "MCP setup, media uploads, confirmations and troubleshooting."
 ---
 
 <Note>
-  **Production status — October 21, 2026.** MCP server **1.8.0** is deployed.
-  Read-only discovery verifies **45 raw tools**, including **25 named provider
-  helpers**. One upload helper is App-only, leaving **44 model-visible tools**
+  **Production status — November 1, 2026.** MCP server **1.9.0** is deployed.
+  Read-only discovery verifies **47 raw tools**, including **25 named provider
+  helpers**. One upload helper is App-only, leaving **46 model-visible tools**
   when all optional features are enabled; client visibility can vary.
   Earlier Claude checks cover workspace reads, media transfer and confirmed
   draft/settings operations. They do not establish live access to every provider
   or fresh Claude acceptance of tools added since those checks. Directory approval
   remains pending, and discovery does not guarantee successful publication.
 </Note>
+
+ChatGPT may expose fewer tools than direct MCP discovery while OpenAI checks an
+update. New tools become available only after those checks pass. See
+[OpenAI’s tool update process](https://developers.openai.com/plugins/deploy/app-review#continuous-review-and-tool-updates).
 
 Nushir MCP lets your assistant inspect your connected workspace, channels and
 calendar, import media you choose, and prepare drafts or scheduled posts for your
@@ -83,7 +87,7 @@ provider settings, posts and publishing receipts. Post creation and settings
 updates use separate Prepare and Commit operations. There is no MCP post-deletion
 operation; manage deletion in the Nushir app.
 
-The server 1.8.0 catalog exposes 25 separately named provider settings helpers,
+The server 1.9.0 catalog exposes 25 separately named provider settings helpers,
 including `linkedinFindCompany` and `linkedinPageFindCompany` for company mentions.
 For example, `pinterestListBoards`, `redditGetSubredditRequirements` and
 `tiktokGetCreatorInfo` use an existing connected channel's `integrationId` and
@@ -249,8 +253,9 @@ supports Direct Post with the privacy choices returned for that creator. Read
 `privacyLevelOptions` and `directPostRestricted` from **Get TikTok Posting Permissions** (`tiktokGetCreatorInfo`);
 only offer the returned choices, and apply a private-only restriction when the
 helper reports it. Existing saved audiences are never upgraded automatically.
-Saving settings keeps the post as a draft; an admin then chooses
-**Approve & schedule** separately. If another editor changes the draft, refresh
+Saving settings keeps the post as a draft. An owner/admin can then
+[finish it through MCP](#finish-a-saved-draft-from-mcp), or choose
+**Approve & schedule** in Nushir. If another editor changes the draft, refresh
 and review the new version before saving.
 
 For regular X posts, choose **Complete X settings** and explicitly select who can
@@ -264,9 +269,40 @@ requires fresh consent; a stored `posting_consent: true` is not reused for chang
 choices. Settings readiness does not replace media, publish-time or provider
 validation at approval.
 
+## Finish a saved draft from MCP
+
+Workspace owners and administrators connected through OAuth can schedule an
+existing draft directly from their assistant with MCP 1.9.0:
+
+1. Read **Get Workspace Time Context** and the post's current status. Complete any
+   missing choices with **Prepare Post Settings** and **Commit Post Settings**
+   after the exact settings are confirmed.
+2. Call **Prepare Draft Schedule** (`prepareDraftScheduleTool`) with the saved
+   post ID, an explicit future ISO date and the returned workspace timezone.
+   Review the channel, every caption/media part, saved settings, follow-up delays
+   and the proposed local/UTC time.
+3. After confirmation, call **Commit Draft Schedule** (`commitDraftScheduleTool`).
+   Nushir approves and schedules the same post ID, keeping content, media and
+   settings. A past draft date can be replaced in this step.
+4. Read **Get Post Status** for actual provider delivery. `QUEUE` records scheduling;
+   `workflowDispatch: CONFIRMED` acknowledges the publishing workflow. If dispatch
+   is `UNKNOWN`, check status; repeated Commit returns its receipt without making
+   a second post.
+
+For example, ask: “Schedule this saved draft for 7 November at 21:30 in my
+workspace timezone, keeping its settings. Show me the full post before I confirm.”
+For new posts, continue using **Prepare Scheduled Post** and **Commit Scheduled
+Post** with `schedule` or `now` after confirmation; creating a draft first is
+optional.
+
+The saved-draft action requires an identified owner/admin, rather than a shared
+organization API key. Members keep the existing administrator-review flow. A
+changed draft needs a new preview. Published, failed, canceled and recurring posts
+are held; this action does not clear receipts or automatically retry them.
+
 ## Request review and handle feedback
 
-With the **1.8.0** catalog, assistants can submit an existing draft for admin
+Assistants can submit an existing draft for admin
 review without scheduling or publishing it. Refresh your client's catalog if the
 review tools are missing.
 
@@ -343,15 +379,22 @@ social post was created by those checks.
 These results are bounded: some other provider checks exercised only a
 missing-channel or invalid-input response, not a successful live provider call.
 They are not exhaustive provider acceptance. The previous 1.5.1 release had
-invocation coverage for its 40 tools, including boundary/error responses. Current
-1.8.0 read-only deployment checks verify discovery, media listing, review feedback
+invocation coverage for its 40 tools, including boundary/error responses. Earlier
+1.8.0 read-only deployment checks verified discovery, media listing, review feedback
 through status/list, private-field exclusion on public previews and the public
-media endpoint. The 45-tool/25-helper inventory is not a claim that every provider
+media endpoint. The current 47-tool/25-helper inventory is not a claim that every provider
 has passed a live call or that Claude has refreshed its catalog. External
 generation, generic selectors and the agent wrapper remain excluded; configured
 in-app AI remains available.
 
-The full OAuth lifecycle, legacy transports, other clients, transfer methods not
-demonstrated above and provider publishing require their own acceptance checks.
+The November 1 live check used an existing normal owner session for a new
+DCR/S256 OAuth grant. Code exchange, token rotation, replay rejection, authenticated
+MCP reads and revocation passed. All 47 tool definitions were discovered; TikTok
+returned an unrestricted Public choice. Prepare Draft Schedule returned the exact
+saved draft/thread without changing its state. Commit Draft Schedule passed
+isolated PostgreSQL tests; the live check did not commit or publish a test post.
+
+Legacy transports, other clients, transfer methods not demonstrated above and
+actual provider publishing require their own acceptance checks.
 Directory/listing approval remains pending and is separate from source review,
 local tests, catalog discovery or the successful Claude draft workflow.
